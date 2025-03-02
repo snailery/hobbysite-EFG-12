@@ -11,6 +11,9 @@ class ProductType(models.Model):
 
     def get_absolute_url(self):
         return reverse('merchstore:items', args=[str(self.name)])
+    
+    class Meta:
+        ordering = ['name']
 
 
 class Product(models.Model):
@@ -29,5 +32,5 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('merchstore:item', args=[str(self.pk)])
     class Meta:
-        ordering = ['name']  # order by due date ascending order
+        ordering = ['name']
     
