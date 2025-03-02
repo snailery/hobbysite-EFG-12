@@ -27,7 +27,7 @@ class Product(models.Model):
     )
 
     def __str__(self):
-        return f"[{self.type}] {self.name}: {self.desc} - PHP{self.price}"
+        return f"[{self.prod_type.name}] {self.name}: {self.desc} - {self.price} Bells"
 
     def get_absolute_url(self):
         return reverse('merchstore:item', args=[str(self.pk)])
