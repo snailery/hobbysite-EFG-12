@@ -7,7 +7,7 @@ class ProductType(models.Model):
     desc = models.TextField()
 
     def __str__(self):
-        return f"{self.name}: {self.desc}"
+        return self.name
 
     def get_absolute_url(self):
         return reverse('merchstore:items', args=[str(self.name)])
