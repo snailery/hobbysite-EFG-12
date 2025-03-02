@@ -10,7 +10,7 @@ class ProductType(models.Model):
         return f"{self.name}: {self.desc}"
 
     def get_absolute_url(self):
-        return reverse('merchstore:item', args=[str(self.pk)])
+        return reverse('merchstore:items', args=[str(self.name)])
 
 
 class Product(models.Model):
