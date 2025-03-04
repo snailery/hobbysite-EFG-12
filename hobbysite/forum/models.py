@@ -19,8 +19,8 @@ class PostCategory(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255)
     entry = models.TextField()
-    created_on = models.DateTimeField(False, True, editable=False)
-    updated_on = models.DateTimeField(True, True, editable=False)
+    created_on = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_on = models.DateTimeField(auto_now=True, editable=False)
     post_type = models.ForeignKey(
         PostCategory,
         null=True,
