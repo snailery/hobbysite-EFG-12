@@ -4,11 +4,11 @@ from django.views.generic.detail import DetailView
 from .models import Article
 
 # Create your views here.
-class ArticleistView(ListView):
+class ArticleListView(ListView):
     model = Article
-    #template_name = 'article.html'
+    template_name = 'article.html'
 
 
 class ArticleDetailView(DetailView):
     model = Article
-    #template_name = 'probablyalsoarticlemaybe.html'
+    template_name = 'articles.html'
