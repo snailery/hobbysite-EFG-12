@@ -10,8 +10,8 @@ class ArticleCategoryAdmin(admin.ModelAdmin):
 
 class ArticleAdmin(admin.ModelAdmin):
     model = Article
-    search_fields = ("name", )
-    list_display = ("name", "category_type", "created_on", "updated_on", "entry")
+    search_fields = ("title", )
+    list_display = ("title", "category_type", "created_on", "updated_on", "entry")
 
     fieldsets = [
         # fieldsets is a list of tuples where the syntax is:
