@@ -21,7 +21,7 @@ class Post(models.Model):
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
-    post_type = models.ForeignKey(
+    post_category = models.ForeignKey(
         PostCategory,
         null=True,
         on_delete=models.SET_NULL
