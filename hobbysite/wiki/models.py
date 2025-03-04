@@ -21,7 +21,7 @@ class Article(models.Model):
     entry = models.TextField()
     created_on = models.DateTimeField(False, True, editable=False)
     updated_on = models.DateTimeField(True, True, editable=False)
-    categoryType = models.ForeignKey(
+    category_type = models.ForeignKey(
         ArticleCategory,
         null=True,
         on_delete=models.SET_NULL
