@@ -95,8 +95,8 @@ for article in articles:
     a = Article()
     a.title = article["title"]
     a.entry = article["entry"]
-    a.created_on = make_aware(article["created_on'])
-    a.updated_on = make_aware(article["updated_on'])
+    a.created_on = make_aware(article["created_on"])
+    a.updated_on = make_aware(article["updated_on"])
     a.category_type = ArticleCategory.objects.get(name=article["category_type"])
     a.save()
     print(f"Successfully added {a}")
