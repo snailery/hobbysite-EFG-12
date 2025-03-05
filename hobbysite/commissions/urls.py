@@ -6,4 +6,4 @@ urlpatterns = [
     path('detail/<int:pk>', CommissionDetailView.as_view(), name='commission')
 ]
 
-app_name = "commission"
+app_name = "commissions"
