@@ -2,6 +2,19 @@
 {% load static %}
 
 {% block title %}Commission{% endblock %}
+
+{% block styles %}
+<style>
+    .commission {
+        background-color: lightgoldenrodyellow;
+    }
+    
+    .comment {
+        background-color: gainsboro;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
     <article class="commission">
         <h1>{{ commission.title }}</h1>
@@ -14,7 +27,7 @@
     </article>
     <section>
         <h2>Comments</h2>
-        {% for comment in comments %}
+        {% for comment in commission.comments.all %}
         <article class="comment">
             <ul>
                 <li><b>Created On:</b> {{ comment.created_on }}</li>
