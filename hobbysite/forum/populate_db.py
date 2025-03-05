@@ -2,19 +2,52 @@ from forum.models import Post, PostCategory
 
 post_categories = [
     {
-        "title": " ",
-        "entry": " ",
+        "title": "Best Drawing Tablets for Beginners",
+        "entry": "Digital Art",
     },
+    {
+        "title": "What's Your Favorite Game of 2025 So Far?",
+        "entry": "Gaming",
+    },
+    {
+        "title": "Books You've Read and Recommend to Others",
+        "entry": "Literature",
+    },
+    {
+        "title": "Underrated Artists Worth Listening",
+        "entry": "Music",
+    }
 ]
 
 posts = [
     {
-        "title": " ",
-        "entry": " ",
-        "created_on": " ",
-        "updated_on": " ",
-        "post_category":" "
+        "title": "Best Drawing Tablets for Beginners",
+        "entry": "I'm looking to buy my first drawing tablet, but I'm overwhelmed by the choices! What's a good tablet for a beginner? Any recommendations?",
+        "created_on": "2025-03-05 14:56:23",
+        "updated_on": "2025-03-05 15:32:46",
+        "post_category": "Digital Art"
     },
+    {
+        "title": "What's Your Favorite Game of 2025 So Far?",
+        "entry": "We’re already a few months into 2025, and there have been some amazing game releases! What’s your top pick so far and why?",
+        "created_on": "2025-03-04 18:23:45",
+        "updated_on": "2025-03-04 18:24:56",
+        "post_category": "Gaming"
+    },
+    {
+        "title": "Books You've Read and Recommend to Others",
+        "entry": "Share your favorite books, and tell us why they stood out to you. Would you recommend it to others?",
+        "created_on": "2025-03-04 09:24:58",
+        "updated_on": "2025-03-05 09:09:08",
+        "post_category": "Literature"
+    },
+    {
+        "title": "Underrated Artists Worth Listening",
+        "entry": "Who are some underrated musicians or bands that deserve more recognition? Drop your recommendations and favorite tracks!",
+        "created_on": "2025-03-01 12:20:36",
+        "updated_on": "2025-03-01 12:25:04",
+        "post_category": "Music"
+    }
 ]
 
 for post_category in post_categories:
