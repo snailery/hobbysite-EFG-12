@@ -10,7 +10,7 @@ class Commission(models.Model):
     updated_on = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
-        return f"[{self.people_required}] {self.title} (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.description}"
+        return self.title
 
     def get_absolute_url(self):
         return reverse('commission:commission', args=[str(self.pk)])
@@ -30,7 +30,7 @@ class Comment(models.Model):
     updated_on = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
-        return f"[{self.commission}] (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
+        return f"[{self.commission}] {self.entry}"
 
     def get_absolute_url(self):
         return reverse('commission:commission', args=[str(self.commission.pk)])
