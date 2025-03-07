@@ -97,7 +97,7 @@ for article in articles:
     a.entry = article["entry"]
     a.created_on = make_aware(article["created_on"])
     a.updated_on = make_aware(article["updated_on"])
-    a.category_type = ArticleCategory.objects.get(name=article["category_type"])
+    a.category_type = ArticleCategory.objects.filter(name=article["category_type"]).first()
     a.save()
     print(f"Successfully added {a}")
 
@@ -105,4 +105,4 @@ print("Successfully populated database.")
 print(ArticleCategory.objects.all())
 print(Article.objects.all())
 
-# exec(open("merchstore/populate_db.py").read())
+# exec(open("merchstore/populate_db.py").read())x``
