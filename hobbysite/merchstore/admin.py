@@ -13,11 +13,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ("name", "desc", "price", "prod_type")
 
     fieldsets = [
-        # fieldsets is a list of tuples where the syntax is:
-        # ('label of the field', {'fields': [<list of fields>]})
         ("Details", {
             "fields": [
-                # the tuple puts these fields in a single line
                 ("name", "desc", "price"), "prod_type"
             ]
         }),
