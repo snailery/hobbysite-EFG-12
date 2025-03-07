@@ -11,19 +11,5 @@ class PostCategoryAdmin(admin.ModelAdmin):
     inlines = [PostInline]
 
 
-class PostAdmin(admin.ModelAdmin):
-    model = Post
-    search_fields = ("title", )
-    list_display = ("title", "entry", "created_on", "updated_on")
-
-    fieldsets = [
-        ("Details", {
-            "fields": [
-                ("title", "entry", "created_on", "updated_on"), "post_category"
-            ]
-        }),
-    ]
-
-
 admin.site.register(PostCategory, PostCategoryAdmin)
-admin.site.register(Post, PostAdmin)
+admin.site.register(Post)
