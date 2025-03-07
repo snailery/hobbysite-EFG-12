@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-# Create your models here.
+
 class PostCategory(models.Model):
     name = models.CharField(max_length=255)
     desc = models.TextField()
@@ -11,7 +11,7 @@ class PostCategory(models.Model):
 
     def get_absolute_url(self):
         return reverse('forum:threads', args=[str(self.name)])
-    
+
     class Meta:
         ordering = ['name']
 
@@ -32,5 +32,6 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('forum:thread', args=[str(self.pk)])
+
     class Meta:
         ordering = ['-created_on']

@@ -21,7 +21,7 @@ class Commission(models.Model):
 
 class Comment(models.Model):
     commission = models.ForeignKey(
-        Commission, 
+        Commission,
         on_delete=models.CASCADE,
         related_name='comments'
     )

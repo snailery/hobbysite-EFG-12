@@ -3,7 +3,7 @@ from django.views.generic.detail import DetailView
 
 from .models import Article
 
-# Create your views here.
+
 class ArticleListView(ListView):
     model = Article
     template_name = 'article.html'

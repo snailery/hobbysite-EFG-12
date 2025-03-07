@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-# Create your models here.
+
 class ProductType(models.Model):
     name = models.CharField(max_length=255)
     desc = models.TextField()
@@ -11,7 +11,7 @@ class ProductType(models.Model):
 
     def get_absolute_url(self):
         return reverse('merchstore:items', args=[str(self.name)])
-    
+
     class Meta:
         ordering = ['name']
 
@@ -31,6 +31,6 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('merchstore:item', args=[str(self.pk)])
+
     class Meta:
         ordering = ['name']
-    
