@@ -1,0 +1,40 @@
+{% extends 'base_commissions.html' %}
+{% load static %}
+
+{% block title %}Commission{% endblock %}
+
+{% block styles %}
+<style>
+    .commission {
+        background-color: lightgoldenrodyellow;
+    }
+    
+    .comment {
+        background-color: gainsboro;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <article class="commission">
+        <h1>{{ commission.title }}</h1>
+        <ul>
+            <li><b>People Required:</b> {{ commission.people_required }}</li>
+            <li><b>Created On:</b> {{ commission.created_on }}</li>
+            <li><b>Last Updated On:</b> {{ commission.updated_on }}</li>
+        </ul>
+        <p>{{ commission.description }}</p>
+    </article>
+    <section>
+        <h2>Comments</h2>
+        {% for comment in commission.comments.all %}
+        <article class="comment">
+            <ul>
+                <li><b>Created On:</b> {{ comment.created_on }}</li>
+                <li><b>Last Updated On:</b> {{ comment.updated_on }}</li>
+            </ul>
+            <p>{{ comment.entry }}</p>            
+        </article>
+        {% endfor %}
+    </section>
+{% endblock %}
