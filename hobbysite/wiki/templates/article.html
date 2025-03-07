@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Article List{% endblock %}
+{% block content %}
+    <ul>
+        <li><b>Title:</b> {{ article.title }}</li>
+        <li><b>Category Type:</b> {{ article.category_type }}</li>
+        <li><b>Created On:</b> {{ article.created_on }}</li>
+        <li><b>Last Updated On:</b> {{ article.updated_on }}</li>
+        <li><b>Entry:</b> {{ article.entry }}</li>
+    </ul>
+    
+{% endblock %}
