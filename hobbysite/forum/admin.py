@@ -17,7 +17,7 @@ class PostAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Details", {
             "fields": [
-                ("title", "entry", "created_on", "updated_on"), "post_type"
+                ("title", "entry", "created_on", "updated_on"), "post_category"
             ]
         }),
     ]
