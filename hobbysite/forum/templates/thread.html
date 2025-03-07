@@ -1,11 +1,12 @@
 {% extends 'base_forum.html' %}
 {% load static %}
 
-{% block title %}Thread{% endblock %}
+{% block title %}Thread List{% endblock %}
 {% block content %}
     <ul>
-        {% for thread in thread_list %}
-        <li><a href="{% url 'forum:thread' thread.pk %}">{{ thread.title }}</a></li>
-        {% endfor %}
+        <li><b>Title:</b> {{ post.title }}</li>
+        <li><b>Entry:</b> {{ post.entry }}</li>
+        <li><b>Created on:</b>  {{ post.created_on }}</li>
+        <li><b>Updated on:</b>  {{ post.updated_on }}</li>
     </ul>
 {% endblock %}
