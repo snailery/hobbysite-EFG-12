@@ -105,4 +105,4 @@ print("Successfully populated database.")
 print(ArticleCategory.objects.all())
 print(Article.objects.all())
 
-# exec(open("merchstore/populate_db.py").read())x``
+# exec(open("wiki/populate.db.py").read())

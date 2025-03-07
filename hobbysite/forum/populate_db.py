@@ -2,20 +2,20 @@ from forum.models import Post, PostCategory
 
 post_categories = [
     {
-        "title": "Best Drawing Tablets for Beginners",
-        "entry": "Digital Art",
+        "desc": "Best Drawing Tablets for Beginners",
+        "name": "Digital Art",
     },
     {
-        "title": "What's Your Favorite Game of 2025 So Far?",
-        "entry": "Gaming",
+        "desc": "What's Your Favorite Game of 2025 So Far?",
+        "name": "Gaming",
     },
     {
-        "title": "Books You've Read and Recommend to Others",
-        "entry": "Literature",
+        "desc": "Books You've Read and Recommend to Others",
+        "name": "Literature",
     },
     {
-        "title": "Underrated Artists Worth Listening",
-        "entry": "Music",
+        "desc": "Underrated Artists Worth Listening",
+        "name": "Music",
     }
 ]
 
@@ -52,8 +52,8 @@ posts = [
 
 for post_category in post_categories:
     pc = PostCategory()
-    pc.title = post_category["title"]
-    pc.entry = post_category["entry"]
+    pc.name = post_category["name"]
+    pc.desc = post_category["desc"]
     pc.save()
     print(f"Successfully added {pc}")
 
