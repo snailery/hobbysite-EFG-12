@@ -28,7 +28,7 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        return f"[{self.post_type.name}] {self.title}: Created on:{self.created_on} Last updated on:{self.updated_on} - {self.entry}"
+        return f"[{self.post_category.name}] {self.title}: Created on:{self.created_on} Last updated on:{self.updated_on} - {self.entry}"
 
     def get_absolute_url(self):
         return reverse('forum:thread', args=[str(self.pk)])
