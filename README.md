@@ -13,7 +13,8 @@
 > git branch -u origin/midterm midterm
 > git remote set-head origin -a
 > git checkout [name]/[app]
-> git branch -d master```
+> git branch -d master
+> ```
 
 * The previous default branch `master` has been changed to `midterm`. This branch serves as our archive for the project at the time of midterm submission (just in case of emergencies).
     * The new default branch is `final/dev`.
