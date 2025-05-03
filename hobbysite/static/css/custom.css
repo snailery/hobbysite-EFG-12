@@ -1,0 +1,43 @@
+/* Utilities */
+
+.h-24px {
+  height: 24px;
+}
+
+
+/* Custom Styling */
+section {
+  border-radius: 48px 0 0 0; 
+  background-color: #F4F6FA;
+  overflow: hidden;
+}
+
+aside a {
+  border-radius: 16.2px;
+}
+
+aside a.active {
+  box-shadow: 0px 0px 0px 3px #FFF, 0px 0px 0px 5px currentColor;
+}
+
+button {
+  -webkit-appearance: none;
+  border-radius: 0;
+  text-align: inherit;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+form {
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Bootstrap Template Additions */
+
