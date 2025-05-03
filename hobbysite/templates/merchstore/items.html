@@ -3,6 +3,7 @@
 
 {% block title %}Items{% endblock %}
 {% block content %}
+<h2>MerchStore</h2>
 <uL>
     {% for item in product_list %}
     <li><a href="{% url 'merchstore:item' item.pk %}">{{ item.name }}</a></li>
