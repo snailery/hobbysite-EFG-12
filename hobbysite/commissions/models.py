@@ -31,22 +31,29 @@ class Commission(models.Model):
         ordering = ['created_on']
 
 
-class Comment(models.Model):
-    people_required = models.PositiveIntegerField()
+class Job(models.Model):
     commission = models.ForeignKey(
         Commission,
         on_delete=models.CASCADE,
-        related_name='comments'
+        related_name='jobs'
     )
-    entry = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True, editable=False)
-    updated_on = models.DateTimeField(auto_now=True, editable=False)
+    role = models.CharField(max_length=255)
+    manpower_required = models.PositiveIntegerField()
+
+    class StatusChoices(models.TextChoices):
+        OPEN = "O"
+        FULL = "F"
+    status = models.CharField(
+        max_length=4,
+        choices=StatusChoices,
+        default=StatusChoices.OPEN,
+    )
 
     def __str__(self):
-        return f"[{self.commission}] {self.entry}"
+        return f"[{self.commission}] {self.role}"
 
     def get_absolute_url(self):
         return reverse('commissions:commission', args=[str(self.commission.pk)])
 
     class Meta:
-        ordering = ['-created_on']
+        ordering = ["-status", "-manpower_required", "role"]
