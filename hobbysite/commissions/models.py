@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 class Commission(models.Model):
@@ -57,3 +58,33 @@ class Job(models.Model):
 
     class Meta:
         ordering = ["-status", "-manpower_required", "role"]
+
+
+class JobApplication(models.Model):
+    Job = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE,
+        related_name='job_applications'
+    )
+    # TODO Applicant foreign key Profile
+
+    class StatusChoices(models.TextChoices):
+        PENDING = "A", _("Pending")
+        ACCEPTED = "B", _("Accepted")
+        REJECTED = "C", _("Rejected")
+    status = models.CharField(
+        max_length=4,
+        choices=StatusChoices,
+        default=StatusChoices.PENDING,
+    )
+
+    applied_on = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return f"[{self.commission}] {self.status}"
+
+    def get_absolute_url(self):
+        return reverse('commissions:commission', args=[str(self.commission.pk)])
+
+    class Meta:
+        ordering = ["status", "-applied_on"]
