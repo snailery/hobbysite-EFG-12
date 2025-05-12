@@ -24,13 +24,61 @@ def commission_create(request):
 
         if commission_form.is_valid():
             commission = commission_form.save()
-            commission_jobs = JobFormSet(request.POST, instance=commission)
+            jobs_formset = JobFormSet(request.POST, instance=commission)
 
-            if commission_jobs.is_valid():
-                commission_jobs.save()
-                return redirect('commission', pk=commission.pk)  # TODO pk or id
+            if jobs_formset.is_valid():
+                jobs = jobs_formset.save()
+                return redirect('commission', pk=commission.pk)  # TODO pk, but might be id
         else:
-            commission_jobs = JobFormSet(request.POST)  # TODO unsure
+            jobs_formset = JobFormSet(request.POST)  # TODO unsure
 
-    ctx = {"commission": commission, "commission_jobs": commission_jobs}
+    ctx = {
+        "commission": commission,
+        "jobs": jobs,
+        "commission_form": commission_form,
+        "jobs_formset": jobs_formset
+    }
     return render(request, "commission_create.html", ctx)
+
+
+def commission_update(request, pk):
+    commission = get_object_or_404(Commission, pk=pk)
+    commission_form = CommissionForm(instance=commission)
+    jobs_formset = JobFormSet(instance=commission)
+
+    if (request.method == "POST"):
+        jobs_formset = JobFormSet(request.POST, instance=commission)
+        if jobs_formset.is_valid():
+            if jobs_formset.cleaned_data:
+                jobs = jobs_formset.save()
+                return redirect('commission-edit', pk=commission.pk)
+        else:
+            commission_form = CommissionForm(instance=commission)
+            ctx = {
+                "commission": commission,
+                "jobs": jobs,
+                "commission_form": commission_form,
+                "jobs_formset": jobs_formset
+            }
+            return render(request, "commission_update.html", ctx)
+
+        commission_form = CommissionForm(request.POST, instance=commission)
+        if commission_form.is_valid():
+            commission = commission_form.save()
+        else:
+            jobs_formset = JobFormSet(request.POST)
+            ctx = {
+                "commission": commission,
+                "jobs": jobs,
+                "commission_form": commission_form,
+                "jobs_formset": jobs_formset
+            }
+            return render(request, "commission_update.html", ctx)
+
+    ctx = {
+        "commission": commission,
+        "jobs": jobs,
+        "commission_form": commission_form,
+        "jobs_formset": jobs_formset
+    }
+    return render(request, "commission_update.html", ctx)
