@@ -6,10 +6,14 @@
 
 
 /* Custom Styling */
-section {
+section:not([id]) {
   border-radius: 48px 0 0 0; 
   background-color: #F4F6FA;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  left: 70px;
+  width: calc(100% - 70px);
+  height: calc(100% - 72px);
 }
 
 aside a {
@@ -38,6 +42,10 @@ form {
   padding: 0;
 }
 
+#wave-top {
+  margin-top: -72px;
+}
+
 
 /* Bootstrap Template Additions */
 
@@ -47,4 +55,21 @@ form {
 
 div[data-kt-menu-trigger]:hover i.hover-rotate-180 {
   transform: rotate(180deg);
+}
+
+.breadcrumb-arrow .breadcrumb-item::after {
+  font-family: FontAwesome;
+  padding-left: .5rem;
+  content: "\f105";
+  font-size: 0.75rem;
+}
+
+.btn-green {
+  background-color: #50B9AB;
+  color: #FFF;
+}
+
+.btn-green:hover, .btn-green:active {
+  background-color: #459f93 !important;
+  color: #FFF !important;
 }
