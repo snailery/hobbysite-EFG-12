@@ -73,7 +73,7 @@ class JobApplication(models.Model):
         ACCEPTED = "B", _("Accepted")
         REJECTED = "C", _("Rejected")
     status = models.CharField(
-        max_length=4,
+        max_length=8,
         choices=StatusChoices,
         default=StatusChoices.PENDING,
     )
