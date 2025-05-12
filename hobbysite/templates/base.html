@@ -50,11 +50,11 @@
                 {% endif %}
               </span>
             </div>
-            <i class="fs-1 text-gray-600 ki-solid ki-down"></i>
+            <i class="fs-1 text-gray-600 ki-solid ki-down hover-rotate-180"></i>
           </div>
           <div class="menu menu-sub menu-sub-dropdown menu-gray-700 menu-hover-primary menu-hover-bg menu-rounded fw-semibold p-3 w-150px" data-kt-menu="true">
             <div class="menu-item">
-              <a href="/profile" class="menu-link">
+              <a href="/profile/{{ user.username }}" class="menu-link">
                 <span class="menu-icon">
                   <i class="ki-duotone ki-user-square fs-2">
                   <span class="path1"></span>
@@ -88,19 +88,7 @@
           </a>
           <div class="menu menu-sub menu-sub-dropdown menu-gray-700 menu-hover-primary menu-hover-bg menu-rounded fw-semibold p-3 w-150px" data-kt-menu="true">
             <div class="menu-item">
-              <a href="/profile" class="menu-link">
-                <span class="menu-icon">
-                  <i class="ki-duotone ki-user-square fs-2">
-                  <span class="path1"></span>
-                  <span class="path2"></span>
-                  <span class="path3"></span>
-                  </i>
-                </span>
-                <span class="menu-title">My Profile</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a href="/profile/login" class="menu-link">
+              <a href="/accounts/login" class="menu-link">
                 <span class="menu-icon">
                   <i class="ki-duotone ki-exit-right fs-2">
                   <span class="path1"></span>

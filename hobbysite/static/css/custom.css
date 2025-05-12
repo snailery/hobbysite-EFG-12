@@ -41,3 +41,10 @@ form {
 
 /* Bootstrap Template Additions */
 
+.hover-rotate-180 {
+  transition: transform .2s ease;
+}
+
+div[data-kt-menu-trigger]:hover i.hover-rotate-180 {
+  transform: rotate(180deg);
+}
