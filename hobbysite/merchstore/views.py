@@ -5,9 +5,9 @@ from .models import Product
 
 class ItemListView(ListView):
     model = Product
-    template_name = 'items.html'
+    template_name = 'merchstore/items.html'
 
 
 class ItemDetailView(DetailView):
     model = Product
-    template_name = 'item.html'
+    template_name = 'merchstore/item.html'
