@@ -17,20 +17,18 @@ class CommissionDetailView(DetailView):
 
 
 def commission_create(request):
-    commission_form = CommissionForm()
-
     if (request.method == "POST"):
         commission_form = CommissionForm(request.POST)
+        jobs_formset = JobFormSet(request.POST)
 
-        if commission_form.is_valid():
+        if commission_form.is_valid() and jobs_formset.is_valid():
             commission = commission_form.save()
-            jobs_formset = JobFormSet(request.POST, instance=commission)
-
-            if jobs_formset.is_valid():
-                jobs = jobs_formset.save()
-                return redirect('commission', pk=commission.pk)  # TODO pk, but might be id
+            jobs_formset.instance = commission
+            jobs = jobs_formset.save()
+            return redirect('commission', pk=commission.pk)  # TODO pk, but might be id
         else:
-            jobs_formset = JobFormSet(request.POST)  # TODO unsure
+            commission_form = CommissionForm()
+            jobs_formset = JobFormSet()
 
     ctx = {
         "commission": commission,
