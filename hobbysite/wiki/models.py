@@ -19,7 +19,7 @@ class ArticleCategory(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(Profile, null=False, on_delete=models.SET_NULL)
+    author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
@@ -35,7 +35,7 @@ class Article(models.Model):
         ordering = ['-created_on']
 
 class Comment(models.Model):
-    author = models.ForeignKey(Profile, null=False, on_delete=models.SET_NULL)
+    author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     article = models.ForeignKey(Article, null=False, on_delete=models.CASCADE)
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
