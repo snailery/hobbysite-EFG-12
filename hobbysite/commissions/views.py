@@ -1,7 +1,7 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Commission, Job, JobApplication
-from .forms import CommissionForm, JobFormSet, CreateJobApplicationForm
+from .forms import CommissionForm, FullCommissionForm, JobFormSet, CreateJobApplicationForm
 from django.shortcuts import render, redirect, get_object_or_404
 
 
@@ -41,13 +41,27 @@ def commission_create(request):
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
     if (request.method == "POST"):
-        commission_form = CommissionForm(request, instance=commission)
+        # Determine if all the commission's jobs are full
+        if (commission.status != "FULL"):
+            is_commission_full = True
+            for job in commission.jobs:
+                if (job.status == "OPEN"):
+                    is_commission_full = False
+                    break
+        
+        if (is_commission_full):
+            commission_form = FullCommissionForm(request, instance=commission)
+        else:
+            commission_form = CommissionForm(request, instance=commission)
         jobs_formset = JobFormSet(request, instance=commission)
 
         if commission_form.is_valid() and jobs_formset.is_valid():
             commission = commission_form.save()
-            jobs_formset.instance = commission
             jobs = jobs_formset.save()
+
+            if (is_commission_full):
+                commission.status = "FULL"
+                commission.save()
             return redirect('commission', pk=commission.pk)  # TODO pk, but might be id
     else:
         commission_form = CommissionForm(instance=commission)

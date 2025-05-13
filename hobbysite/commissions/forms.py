@@ -9,6 +9,11 @@ class CommissionForm(forms.ModelForm):
         fields = '__all__'
 
 
+class FullCommissionForm(CommissionForm):
+    class Meta:
+        exclude = ["status"]
+
+
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
