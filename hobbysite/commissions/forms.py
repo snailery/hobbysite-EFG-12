@@ -15,7 +15,7 @@ class JobForm(forms.ModelForm):
         exclude = ["status"]
 
 
-JobFormSet = inlineformset_factory(Commission, Job, form=JobForm, extra=1)
+JobFormSet = inlineformset_factory(Commission, Job, form=JobForm, extra=5)
 
 
 class UpdateJobApplicationForm(forms.ModelForm):
