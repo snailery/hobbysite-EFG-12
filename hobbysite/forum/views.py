@@ -12,7 +12,7 @@ def index(request):
 
 class ThreadListView(ListView):
     model = Post
-    template_name = 'thread_list.html' #former threads.html
+    template_name = "thread_list.html" #former threads.html
 
     def get_queryset(self):
         # Load all threads with related categories and authors
@@ -44,7 +44,7 @@ class ThreadListView(ListView):
 
 class ItemDetailView(DetailView):
     model = Post
-    template_name = 'thread_view.html' #former thread.html
+    template_name = "thread_view.html" #former thread.html
 
      def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -83,3 +83,28 @@ class ItemDetailView(DetailView):
         context = self.get_context_data(comment_form=form)
         return self.render_to_response(context)
 
+
+class ThreadCreateView(LoginRequiredMixin, CreateView):
+    model = models.Thread
+    fields = ["title", "entry", "image", "category"]
+    template_name = "thread_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = models.Thread
+    fields = ["title", "entry", "image", "category"]
+    template_name = "thread_form.html"
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+    def test_func(self):
+        thread = self.get_object()
+        return thread.author.user == self.request.user
