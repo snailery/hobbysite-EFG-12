@@ -24,7 +24,7 @@ def commission_create(request):
             commission = commission_form.save()
             jobs_formset.instance = commission
             jobs_formset.save()
-            return redirect('commissions:commission', pk=commission.pk)  # TODO pk, but might be id
+            return redirect('commissions:commission', pk=commission.pk)
     else:
         commission_form = CommissionForm()
         jobs_formset = JobFormSet()
@@ -42,16 +42,16 @@ def commission_update(request, pk):
         # Determine if all the commission's jobs are full
         if (commission.status != "FULL"):
             is_commission_full = True
-            for job in commission.jobs:
+            for job in commission.jobs.all():
                 if (job.status == "OPEN"):
                     is_commission_full = False
                     break
-        
+
         if (is_commission_full):
-            commission_form = FullCommissionForm(request, instance=commission)
+            commission_form = FullCommissionForm(request.POST, instance=commission)
         else:
-            commission_form = CommissionForm(request, instance=commission)
-        jobs_formset = JobFormSet(request, instance=commission)
+            commission_form = CommissionForm(request.POST, instance=commission)
+        jobs_formset = JobFormSet(request.POST, instance=commission)
 
         if commission_form.is_valid() and jobs_formset.is_valid():
             commission = commission_form.save()
@@ -60,7 +60,7 @@ def commission_update(request, pk):
             if (is_commission_full):
                 commission.status = "FULL"
                 commission.save()
-            return redirect('commission', pk=commission.pk)  # TODO pk, but might be id
+            return redirect('commissions:commission', pk=commission.pk)
     else:
         commission_form = CommissionForm(instance=commission)
         jobs_formset = JobFormSet(instance=commission)

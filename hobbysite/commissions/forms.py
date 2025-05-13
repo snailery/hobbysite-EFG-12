@@ -6,11 +6,12 @@ from django.forms import inlineformset_factory
 class CommissionForm(forms.ModelForm):
     class Meta:
         model = Commission
-        fields = '__all__'
+        exclude = []
 
 
 class FullCommissionForm(CommissionForm):
     class Meta:
+        model = Commission
         exclude = ["status"]
 
 
@@ -20,7 +21,7 @@ class JobForm(forms.ModelForm):
         exclude = ["status"]
 
 
-JobFormSet = inlineformset_factory(Commission, Job, form=JobForm, extra=5)
+JobFormSet = inlineformset_factory(Commission, Job, form=JobForm)
 
 
 class UpdateJobApplicationForm(forms.ModelForm):
