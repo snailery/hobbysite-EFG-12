@@ -9,10 +9,10 @@ class Commission(models.Model):
     description = models.TextField()
 
     class StatusChoices(models.TextChoices):
-        OPEN = "O"
-        FULL = "F"
-        COMPLETED = "C"
-        DISCONTINUED = "D"
+        OPEN = "OPEN"
+        FULL = "FULL"
+        COMPLETED = "COMPLETED"
+        DISCONTINUED = "DISCONTINUED"
     status = models.CharField(
         max_length=12,
         choices=StatusChoices,
@@ -42,8 +42,8 @@ class Job(models.Model):
     manpower_required = models.PositiveIntegerField()
 
     class StatusChoices(models.TextChoices):
-        OPEN = "O"
-        FULL = "F"
+        OPEN = "OPEN"
+        FULL = "FULL"
     status = models.CharField(
         max_length=4,
         choices=StatusChoices,

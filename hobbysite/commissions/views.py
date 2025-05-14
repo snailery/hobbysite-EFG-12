@@ -71,17 +71,6 @@ def commission_update(request, pk):
         is_commission_full = False
 
     if (request.method == "POST"):
-        # Check and Update Job Statuses
-        for job in commission.jobs.filter(status="OPEN"):
-            if (job.job_applications.filter(status="ACCEPTED").count() >= job.manpower_required):
-                job.status = "FULL"
-                job.save()
-
-        # Recheck Commission Status
-        is_commission_full = True
-        if (commission.jobs.filter(status="OPEN").exists()):
-            is_commission_full = False
-
         # Instantiate Forms
         if (is_commission_full):
             commission_form = FullCommissionForm(request.POST, instance=commission)
@@ -96,10 +85,25 @@ def commission_update(request, pk):
             jobs_formset.save()
             job_application_formset.save()
 
+            # Check and Update Job Statuses
+            for job in commission.jobs.all():
+                job.status = "OPEN"
+                if (job.job_applications.filter(status="B").count() >= job.manpower_required):  # status "B" is "ACCEPTED"
+                    job.status = "FULL"
+                job.save()
+
+            # Recheck Commission Status
+            is_commission_full = True
+            if (commission.jobs.filter(status="OPEN").exists()):
+                is_commission_full = False
+
             # Update Commission Status
             if (is_commission_full):
                 commission.status = "FULL"
-                commission.save()
+            else:
+                commission.status = "OPEN"
+            commission.save()
+
             return redirect('commissions:commission', pk=commission.pk)
     else:
         if (is_commission_full):

@@ -18,7 +18,10 @@
     {% for job in commission.jobs.all %}
     <div>
         <h3>Job: {{ job.role }}</h3>
-        <p><b>Manpower Required: </b>{{ job.manpower_required }}</p>
+        <ul>
+            <li><b>Status: </b>{{ job.status }}</li>
+            <li><b>Manpower Required: </b>{{ job.manpower_required }}</li>
+        </ul>
 
         <form method="post">
             {% csrf_token %}
