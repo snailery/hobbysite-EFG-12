@@ -22,7 +22,7 @@ class JobForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["Profile"].disabled = True
+        #self.fields["Profile"].disabled = True
         self.fields["status"].disabled = True
 
 
@@ -36,7 +36,7 @@ class JobApplicationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["Profile"].disabled = True
+        #self.fields["Profile"].disabled = True
         self.fields["Job"].disabled = True
         
 

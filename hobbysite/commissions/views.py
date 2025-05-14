@@ -38,6 +38,11 @@ def commission_create(request):
 
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
+    # Check Commission Status
+    is_commission_full = True
+    if (commission.jobs.filter(status="OPEN").exists()):
+        is_commission_full = False
+
     if (request.method == "POST"):
         # Check and Update Job Statuses
         for job in commission.jobs.filter(status="OPEN"):
@@ -45,16 +50,19 @@ def commission_update(request, pk):
                 job.status = "FULL"
                 job.save()
 
-        # Check Commission Status
-        if (commission.status != "FULL"):
-            is_commission_full = True
+        # Recheck Commission Status
+        is_commission_full = True
+        if (commission.jobs.filter(status="OPEN").exists()):
+            is_commission_full = False
 
+        # Instantiate Forms
         if (is_commission_full):
             commission_form = FullCommissionForm(request.POST, instance=commission)
         else:
             commission_form = CommissionForm(request.POST, instance=commission)
         jobs_formset = JobFormSet(request.POST, instance=commission)
 
+        # Form Validation
         if commission_form.is_valid() and jobs_formset.is_valid():
             commission = commission_form.save()
             jobs_formset.save()
