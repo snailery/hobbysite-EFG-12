@@ -42,7 +42,7 @@ class ArticleDetailView(DetailView):
         ctx['article'] = article
         ctx['comment_form'] = CommentForm()
 
-        similar_articles = Article.objects.filter(category=article.category_type).exclude(pk=article.pk)
+        similar_articles = Article.objects.filter(category_type=article.category_type).exclude(pk=article.pk)
         ctx['similar_articles'] = similar_articles
 
         return ctx

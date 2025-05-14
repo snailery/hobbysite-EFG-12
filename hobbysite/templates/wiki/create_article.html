@@ -1,0 +1,12 @@
+{% extends base.html %}
+{% load static %}
+
+{% block content %}
+    <form method="POST"></form>
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Post</button>
+    </form>
+
+    <a href="{{ article.get_absolute_url }}">Back</a>
+{% endblock %}
