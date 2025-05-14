@@ -51,7 +51,7 @@ class Job(models.Model):
     )
 
     def __str__(self):
-        return f"[{self.commission}] {self.role}"
+        return f"{self.role}" # TODO include Profile?
 
     def get_absolute_url(self):
         return reverse('commissions:commission', args=[str(self.commission.pk)])
@@ -81,7 +81,7 @@ class JobApplication(models.Model):
     applied_on = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
-        return f"[{self.commission}] {self.status}"
+        return f"[{self.job}] {self.status}"
 
     def get_absolute_url(self):
         return reverse('commissions:commission', args=[str(self.commission.pk)])

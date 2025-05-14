@@ -2,17 +2,40 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Commission, Job, JobApplication
 from .forms import CommissionForm, FullCommissionForm, JobFormSet, JobApplicationFormSet, ApplyToJobForm
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.db.models import Sum
 
 class CommissionListView(ListView):
     model = Commission
     template_name = 'commissions.html'
 
 
-class CommissionDetailView(DetailView):
-    model = Commission
-    template_name = 'commission.html'
+def commission_detail(request, pk):
+    commission = get_object_or_404(Commission, pk=pk)
+    job_applications = JobApplication.objects.filter(job__commission=commission)
+    accepted_job_applications_count = job_applications.filter(status="B").count()
+    total_manpower = commission.jobs.aggregate(Sum("manpower_required"))["manpower_required__sum"] or 0
+    open_manpower = total_manpower - accepted_job_applications_count
+
+    if request.method == "POST":
+        for job in commission.jobs.all():
+            apply_form = ApplyToJobForm(request.POST)
+            if apply_form.is_valid():
+                job_application = apply_form.save()
+                job_application.job = job
+                job_application.save()
+    else:
+        for job in commission.jobs.all():
+            apply_form = ApplyToJobForm()
+
+    ctx = {
+        "commission": commission,
+        "open_manpower": open_manpower,
+        "total_manpower": total_manpower,
+    }
+    return render(request, "commission.html", ctx)
 
 
 def commission_create(request):
@@ -64,9 +87,10 @@ def commission_update(request, pk):
         job_application_formset = JobApplicationFormSet(request.POST, queryset=JobApplication.objects.filter(job__commission=commission))
 
         # Form Validation
-        if commission_form.is_valid() and jobs_formset.is_valid():
+        if commission_form.is_valid() and jobs_formset.is_valid() and job_application_formset.is_valid():
             commission = commission_form.save()
             jobs_formset.save()
+            job_application_formset.save()
 
             # Update Commission Status
             if (is_commission_full):

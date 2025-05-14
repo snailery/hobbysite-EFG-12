@@ -37,7 +37,7 @@ class JobApplicationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         #self.fields["Profile"].disabled = True
-        self.fields["Job"].disabled = True
+        self.fields["job"].disabled = True
 
 
 JobApplicationFormSet = modelformset_factory(
@@ -51,4 +51,4 @@ JobApplicationFormSet = modelformset_factory(
 class ApplyToJobForm(forms.ModelForm):
     class Meta:
         model = JobApplication
-        exclude = ["Job", "Profile", "status"]
+        exclude = ["status", "Profile", "Job"]

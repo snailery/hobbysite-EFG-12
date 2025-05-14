@@ -7,11 +7,13 @@
         {% csrf_token %}
         {{ commission_form }}
 
+        <h1>Jobs</h1>
         {{ jobs_formset.management_form }}
         {% for job_form in jobs_formset %}
             <p>{{ job_form }}</p>
         {% endfor %}
 
+        <h1>Job Applications</h1>
         {{ job_application_formset.management_form }}
         {% for job_application_form in job_application_formset %}
             <p>{{ job_application_form }}</p>
