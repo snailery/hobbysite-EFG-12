@@ -39,15 +39,15 @@ def commission_create(request):
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
     if (request.method == "POST"):
-        # Update Commission and Job status if full
+        # Check and Update Job Statuses
+        for job in commission.jobs.filter(status="OPEN"):
+            if (job.job_applications.filter(status="ACCEPTED").count() >= job.manpower_required):
+                job.status = "FULL"
+                job.save()
+
+        # Check Commission Status
         if (commission.status != "FULL"):
             is_commission_full = True
-            for job in commission.jobs.filter(status="OPEN"):
-                is_commission_full = False
-
-                if (job.job_applications.filter(status="ACCEPTED").count() >= job.manpower_required):
-                    job.status = "FULL"
-                    job.save()
 
         if (is_commission_full):
             commission_form = FullCommissionForm(request.POST, instance=commission)
@@ -59,12 +59,16 @@ def commission_update(request, pk):
             commission = commission_form.save()
             jobs_formset.save()
 
+            # Update Commission Status
             if (is_commission_full):
                 commission.status = "FULL"
                 commission.save()
             return redirect('commissions:commission', pk=commission.pk)
     else:
-        commission_form = CommissionForm(instance=commission)
+        if (is_commission_full):
+            commission_form = FullCommissionForm(instance=commission)
+        else:
+            commission_form = CommissionForm(instance=commission)
         jobs_formset = JobFormSet(instance=commission)
 
     ctx = {
