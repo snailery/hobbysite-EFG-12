@@ -1,20 +1,15 @@
 from django import forms
 from .models import ArticleCategory, Article, Comment
-from django.forms import inlineformset_factory
 
-
-class ArticleCategoryForm(forms.ModelForm):
-    class Meta:
-        model = ArticleCategory
-        fields = '__all__'
 
 class ArticleForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=ArticleCategory.objects.all(), empty_label="Choose a category")
     class Meta:
         model = Article
-        fields = '__all__'
+        fields = ['title', 'entry'] # no images yet
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        exclude = ["status"]
+        fields = ["entry"]
 
