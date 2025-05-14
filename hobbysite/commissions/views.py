@@ -14,26 +14,30 @@ class CommissionListView(ListView):
 
 def commission_detail(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
+    jobs = commission.jobs.all()
     job_applications = JobApplication.objects.filter(job__commission=commission)
     accepted_job_applications_count = job_applications.filter(status="B").count()
     total_manpower = commission.jobs.aggregate(Sum("manpower_required"))["manpower_required__sum"] or 0
     open_manpower = total_manpower - accepted_job_applications_count
 
     if request.method == "POST":
-        for job in commission.jobs.all():
-            apply_form = ApplyToJobForm(request.POST)
-            if apply_form.is_valid():
-                job_application = apply_form.save()
-                job_application.job = job
-                job_application.save()
+        job_id = request.POST.get('job_id')
+        job = get_object_or_404(jobs, pk=job_id)
+        apply_form = ApplyToJobForm(request.POST)
+
+        if apply_form.is_valid():
+            job_application = apply_form.save(commit=False)
+            job_application.job = job
+            job_application.save()
+            return redirect("commissions:commission", pk=commission.pk)
     else:
-        for job in commission.jobs.all():
-            apply_form = ApplyToJobForm()
+        apply_form = ApplyToJobForm()
 
     ctx = {
         "commission": commission,
         "open_manpower": open_manpower,
         "total_manpower": total_manpower,
+        "apply_form": apply_form
     }
     return render(request, "commission.html", ctx)
 

@@ -51,4 +51,4 @@ JobApplicationFormSet = modelformset_factory(
 class ApplyToJobForm(forms.ModelForm):
     class Meta:
         model = JobApplication
-        exclude = ["status", "Profile", "Job"]
+        exclude = ["status", "Profile", "job"]
