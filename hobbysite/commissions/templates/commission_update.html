@@ -6,9 +6,15 @@
     <form method="post">
         {% csrf_token %}
         {{ commission_form }}
+
         {{ jobs_formset.management_form }}
         {% for job_form in jobs_formset %}
             <p>{{ job_form }}</p>
+        {% endfor %}
+
+        {{ job_application_formset.management_form }}
+        {% for job_application_form in job_application_formset %}
+            <p>{{ job_application_form }}</p>
         {% endfor %}
         <button type="submit">Update Commission</button>
     </form>

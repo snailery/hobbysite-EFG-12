@@ -61,7 +61,7 @@ class Job(models.Model):
 
 
 class JobApplication(models.Model):
-    Job = models.ForeignKey(
+    job = models.ForeignKey(
         Job,
         on_delete=models.CASCADE,
         related_name='job_applications'

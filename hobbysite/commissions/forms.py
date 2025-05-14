@@ -38,7 +38,7 @@ class JobApplicationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         #self.fields["Profile"].disabled = True
         self.fields["Job"].disabled = True
-        
+
 
 JobApplicationFormSet = modelformset_factory(
     JobApplication,

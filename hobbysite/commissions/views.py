@@ -61,6 +61,7 @@ def commission_update(request, pk):
         else:
             commission_form = CommissionForm(request.POST, instance=commission)
         jobs_formset = JobFormSet(request.POST, instance=commission)
+        job_application_formset = JobApplicationFormSet(request.POST, queryset=JobApplication.objects.filter(job__commission=commission))
 
         # Form Validation
         if commission_form.is_valid() and jobs_formset.is_valid():
@@ -78,9 +79,11 @@ def commission_update(request, pk):
         else:
             commission_form = CommissionForm(instance=commission)
         jobs_formset = JobFormSet(instance=commission)
+        job_application_formset = JobApplicationFormSet(queryset=JobApplication.objects.filter(job__commission=commission))
 
     ctx = {
         "commission_form": commission_form,
-        "jobs_formset": jobs_formset
+        "jobs_formset": jobs_formset,
+        "job_application_formset": job_application_formset
     }
     return render(request, "commission_update.html", ctx)
