@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from user_management.models import Profile
 
 class ThreadCategory(models.Model):
     name = models.CharField(max_length=255)
@@ -18,7 +18,7 @@ class ThreadCategory(models.Model):
 
 class Thread(models.Model):
     title = models.CharField(max_length=255)
-    author = models.Foreignkey(
+    author = models.ForeignKey(
         Profile,
         null=True,
         on_delete=models.SET_NULL,
@@ -55,13 +55,13 @@ class Thread(models.Model):
 
 
 class Comment(models.Model):
-    author = models.Foreignkey(
+    author = models.ForeignKey(
         Profile,
         null=True,
         on_delete=models.SET_NULL,
         related_name='forum_comments'
     )
-    thread = models.Foreignkey(
+    thread = models.ForeignKey(
         ThreadCategory,
         null=True,
         on_delete=models.CASCADE,
@@ -70,9 +70,6 @@ class Comment(models.Model):
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
-
-    def __str__(self):
-        return self.entry[]
 
     class Meta:
         ordering = ['-created_on']
