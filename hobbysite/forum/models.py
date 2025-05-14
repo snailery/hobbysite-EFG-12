@@ -24,7 +24,7 @@ class Thread(models.Model):
         on_delete=models.SET_NULL,
         related_name='threads'
     )
-    category = models.Foreignkey(
+    category = models.ForeignKey(
         ThreadCategory,
         null=True,
         on_delete=models.SET_NULL,
@@ -38,11 +38,6 @@ class Thread(models.Model):
     )
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
-    post_category = models.ForeignKey(
-        PostCategory,
-        null=True,
-        on_delete=models.SET_NULL
-    )
 
     def __str__(self):
         return f"[{self.thread_category.name}] {self.title}: Created on:{self.created_on} Last updated on:{self.updated_on} - {self.entry}"
