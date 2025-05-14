@@ -18,8 +18,8 @@ class ItemDetailView(DetailView):
 def item_list(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(id=request.user.id)
-        your_products = Product.objects.exclude(owner=profile)
-        all_products = Product.objects.filter(owner=profile)
+        your_products = Product.objects.filter(owner=profile)
+        all_products = Product.objects.exclude(owner=profile)
     else:
         all_products = Product.objects.all()
         your_products = []

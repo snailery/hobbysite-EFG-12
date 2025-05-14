@@ -44,7 +44,7 @@
             <div class="d-flex flex-column">
               <span class="text-gray-600 fw-semibold fs-7">Welcome back,</span>
               <span class="text-gray-800 fs-5 fw-bold d-flex align-items-center">
-                {{ user.username }}
+                {{ user.profile.display_name }}
                 {% if user.is_superuser %}
                   <i class="text-primary fs-2 ms-1 ki-solid ki-verify"></i>
                 {% endif %}
@@ -193,7 +193,7 @@
           </svg>
         </a>
       </aside>
-      <section class="p-10 position-absolute">
+      <section class="px-6 px-md-10 py-10 position-absolute">
         {% block content %}
 
         {% endblock %}

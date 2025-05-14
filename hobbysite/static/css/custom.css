@@ -4,9 +4,59 @@
   height: 24px;
 }
 
+.w-fit {
+  width: fit-content !important;
+}
+
+
+/* Custom Font */
+
+@font-face {
+  font-family: 'Arial-Rounded-MT';
+  src: url('../arial-rounded/arialroundedmt-webfont.woff2') format('woff2'),
+       url('../arial-rounded/arialroundedmt-webfont.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'Arial-Rounded-MT';
+  src: url('../arial-rounded/arialroundedmtextrabold-webfont.woff2') format('woff2'),
+       url('../arial-rounded/arialroundedmtextrabold-webfont.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'Arial-Rounded-MT';
+  src: url('../arial-rounded/arialroundedmtlight-webfont.woff2') format('woff2'),
+       url('../arial-rounded/arialroundedmtlight-webfont.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'Arial-Rounded-MT';
+  src: url('../arial-rounded/arlrdbd-webfont.woff2') format('woff2'),
+       url('../arial-rounded/arlrdbd-webfont.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+
+}
+
+.text-arial-rounded {
+  font-family: 'Arial-Rounded-MT', 'Inter', sans-serif;
+}
 
 /* Custom Styling */
-section:not([id]) {
+body {
+  background: #FFF;
+}
+
+section:not(.items) {
   border-radius: 48px 0 0 0; 
   background-color: #F4F6FA;
   overflow-x: hidden;
@@ -14,6 +64,60 @@ section:not([id]) {
   left: 70px;
   width: calc(100% - 70px);
   height: calc(100% - 72px);
+}
+
+@media (max-width: 768px) {
+  section:not([id]) {
+    border-radius: 0; 
+    left: 0;
+    width: 100%;
+  }
+}
+
+section.items article {
+  width: 245px;
+}
+
+.btn i.ki-plus-square {
+  bottom: 2px;
+}
+
+@media (max-width: 553px) {
+  section.items {
+    width: 100%;
+  }
+
+  section.items article {
+    width: calc((100% - 12px) / 2);
+  }
+
+  .btn i.ki-plus-square {
+    bottom: 0;
+  }
+}
+
+@media (max-width: 926px) {
+  section.items {
+    width: 516px;
+  }
+}
+
+@media (min-width: 927px) {
+  section.items {
+    width: 787px;
+  }
+}
+
+@media (min-width: 1208px) {
+  section.items {
+    width: 1058px;
+  }
+}
+
+@media (min-width: 1479px) {
+  section.items {
+    width: 1329px;
+  }
 }
 
 aside a {
@@ -46,9 +150,7 @@ form {
   margin-top: -72px;
 }
 
-
 /* Bootstrap Template Additions */
-
 .hover-rotate-180 {
   transition: transform .2s ease;
 }
@@ -72,4 +174,13 @@ div[data-kt-menu-trigger]:hover i.hover-rotate-180 {
 .btn-green:hover, .btn-green:active {
   background-color: #459f93 !important;
   color: #FFF !important;
+}
+
+figcaption a:hover {
+  text-decoration: underline !important;
+  color: var(--bs-link-color-rgb) !important;
+}
+
+figcaption div.pfp, figcaption img.pfp {
+  width: 18px;
 }

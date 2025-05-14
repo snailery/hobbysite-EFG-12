@@ -9,8 +9,8 @@
     <path d="M397.573 266.969C294.093 289.534 89.9594 276.371 0.827637 266.969V0H1206.66V266.969C1138.07 283.894 889.195 281.728 824.147 266.969C672.841 241.122 458.405 255.329 397.573 266.969Z" fill="#E1E3EA"/>
   </svg>    
 </div>
-<main class="position-relative">
-  <ol class="breadcrumb breadcrumb-arrow text-muted fs-6 fw-semibold">
+<main class="position-relative text-arial-rounded">
+  <ol class="breadcrumb breadcrumb-arrow text-muted fs-6 fw-bold">
     <li class="breadcrumb-item">
       <a href="/" class="">
         <i class="ki-duotone ki-home"></i>
@@ -20,7 +20,7 @@
     <li class="breadcrumb-item text-gray-800">Items</li>
   </ol>
   
-  {% if request.user.is_authenticated %}
+  {% if request.user.is_authenticated and your_products%}
     {% with products=your_products header="Your Products" %}
       {% include "merchstore/items-list.html" %}
     {% endwith %}
@@ -32,4 +32,12 @@
 
   
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $('a').click(function(event){
+    event.stopPropagation();
+ });
+</script>
 {% endblock %}
