@@ -36,8 +36,8 @@ class Thread(models.Model):
         blank=True,
         null=True
     )
-    created_on = models.DateTimeField(auto_now_add=True, editable=False)
-    updated_on = models.DateTimeField(auto_now=True, editable=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"[{self.thread_category.name}] {self.title}: Created on:{self.created_on} Last updated on:{self.updated_on} - {self.entry}"
