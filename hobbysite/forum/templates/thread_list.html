@@ -1,5 +1,68 @@
-{% extends 'base_forum.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Thread List{% endblock %}
+{% block title %}
+Thread List
+{% endblock %}
+
 {% block content %}
+<h1>Thread List</h1>
+
+{# User's Threads Section #}
+{% if user.is_authenticated %}
+    {% if user_threads %}
+        <h2>My Threads</h2>
+        {% regroup user_threads by category as my_groups %}
+        {% for group in my_groups %}
+            <h3>
+                {{ group.grouper.name }}
+                {% if group.grouper.description %}
+                    <i>({{ group.grouper.description }})</i>
+                {% endif %}
+            </h3>
+            <ul>
+                {% for thread in group.list %}
+                    <li>
+                        <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            <p>You haven't written any threads yet. Start by creating your first one below!</p>
+        </div>
+    {% endif %}
+{% endif %}
+
+{# All Other Threads Section #}
+<h2>All Threads</h2>
+{% if threads_by_category %}
+    {% for category, threads in threads_by_category.items %}
+        <h3>
+            {{ category }}
+        </h3>
+        <ul>
+            {% for thread in threads %}
+                <li>
+                    <a href="{{ thread.get_absolute_url }}">{{ thread.title }}</a>
+                    {% if thread.author.display_name %}
+                        by {{ thread.author.display_name }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% else %}
+    <p>No threads have been posted yet.</p>
+{% endif %}
+
+{# Thread Creation Button #}
+{% if user.is_authenticated %}
+    <p>
+        <a href="{{ create_thread_url }}" class="btn btn-primary">+ Create New Thread</a>
+    </p>
+{% else %}
+    <p>Please <a href="{% url 'login' %}">log in</a> to create a thread.</p>
+{% endif %}
+{% endblock %}
