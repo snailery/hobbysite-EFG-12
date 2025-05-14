@@ -27,7 +27,7 @@ def render_articles(request):
         }
     else:
         ctx = {
-            'all articles': categories
+            'all_articles': categories
         }
 
 class ArticleDetailView(DetailView):

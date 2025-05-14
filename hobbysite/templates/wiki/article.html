@@ -1,14 +1,41 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Article List{% endblock %}
+{% block title %}Article{% endblock %}
 {% block content %}
-    <ul>
-        <li><b>Title:</b> {{ article.title }}</li>
-        <li><b>Category Type:</b> {{ article.category_type }}</li>
-        <li><b>Created On:</b> {{ article.created_on }}</li>
-        <li><b>Last Updated On:</b> {{ article.updated_on }}</li>
-        <li><b>Entry:</b> {{ article.entry }}</li>
-    </ul>
+    {% if request.user.is_authenticated and user.profile == article.author %}
+            <a href="{% url 'wiki:edit_article' pk=object.pk %}">Edit Article</a>
+    {% endif %}
+
+    <h3><b>{{ article.title }}</b></h3>
+    <h4><b>Category Type:</b> {{ article.category_type }}</h4>
+    <p><b>Created On:</b> {{ article.created_on }}</p>
+    <p><b>Last Updated On:</b> {{ article.updated_on }}</p>
+    <br>
+    <p><pre> {{ article.entry }}</p>
+
+    <br>
+
+    {% if request.user.is_authenticated %}
+    <h4>Comments</h4>
+        <form method="POST">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Post Comment</button>
+        </form>
+        {% for comment in article.comment_set.all %}
+            <p><b>{{ comment.author }}</b> ({{ comment.created_on }}) - {{ comment.entry }}</p>
+        {% endfor %}
+    <br>
+    {% endif %}
+
+    <h3>Other Related Articles:</h3>
+        {% for similar_article in similar_articles %}
+            <a href="{{ similar_article.get_absolute_url }}">{{ similar_article }}</a>
+        {% endfor %}
+
+
+
+    <a href="{{ article.get_absolute_url }}">Back</a>
     
 {% endblock %}

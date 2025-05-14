@@ -1,11 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Articles{% endblock %}
+{% block title %}Article List{% endblock %}
 {% block content %}
-<uL>
-    {% for article in article_list %}
-    <li><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></li>
-    {% endfor %}
-</uL>
+    <h1>Wiki</h1>
+    {% if request.user.is_authenticated %}
+    <h2>Your Articles</h2>
+        <ul>
+            {% for personal_article in my_articles %}
+                <ul>
+                    <a href="{{ my_articles.get_absolute_url }}">{{ my_articles }}</a>
+                </ul>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'wiki:create_article' %}">Create New Article</a>
+    {% endif %}
+    <h2>All Articles</h2>
+        {% for article in all_articles %}
+            {% if article not in my_articles %}
+                <ul>
+                    <h3><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a>
+                </ul>
+            {% endif % }
+        {% endfor %}
 {% endblock %}
