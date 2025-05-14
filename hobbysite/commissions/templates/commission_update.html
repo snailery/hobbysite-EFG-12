@@ -1,7 +1,7 @@
 {% extends 'base_commissions.html' %}
 {% load static %}
 
-{% block title %}Create Commission{% endblock %}
+{% block title %}Update Commission{% endblock %}
 {% block content %}
     <form method="post">
         {% csrf_token %}
@@ -10,6 +10,6 @@
         {% for job_form in jobs_formset %}
             <p>{{ job_form }}</p>
         {% endfor %}
-        <button type="submit">Create Commission with Job Openings</button>
+        <button type="submit">Update Commission</button>
     </form>
 {% endblock %}
