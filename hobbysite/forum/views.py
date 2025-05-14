@@ -42,11 +42,11 @@ class ThreadListView(ListView):
         return context
 
 
-class ItemDetailView(DetailView):
+class ThreadDetailView(DetailView):
     model = models.Thread
     template_name = "thread_view.html" #former thread.html
 
-     def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         selected_thread = self.get_object()
 

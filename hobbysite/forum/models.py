@@ -57,7 +57,7 @@ class Comment(models.Model):
         related_name='forum_comments'
     )
     thread = models.ForeignKey(
-        ThreadCategory,
+        Thread,
         null=True,
         on_delete=models.CASCADE,
         related_name='forum_comments'
