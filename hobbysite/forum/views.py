@@ -11,7 +11,7 @@ def index(request):
     return HttpResponse("Forum home")
 
 class ThreadListView(ListView):
-    model = Post
+    model = models.Thread
     template_name = "thread_list.html" #former threads.html
 
     def get_queryset(self):
@@ -43,7 +43,7 @@ class ThreadListView(ListView):
 
 
 class ItemDetailView(DetailView):
-    model = Post
+    model = models.Thread
     template_name = "thread_view.html" #former thread.html
 
      def get_context_data(self, **kwargs):
