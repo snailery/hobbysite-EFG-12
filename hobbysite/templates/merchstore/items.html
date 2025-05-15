@@ -20,15 +20,19 @@
     <li class="breadcrumb-item text-gray-800">Items</li>
   </ol>
   
-  {% if request.user.is_authenticated and your_products%}
+  {% if request.user.is_authenticated and your_products %}
     {% with products=your_products header="Your Products" %}
       {% include "merchstore/items-list.html" %}
     {% endwith %}
     <hr class="my-6">
   {% endif %}  
-  {% with products=all_products header="All Products" %}
-    {% include "merchstore/items-list.html" %}
-  {% endwith %}
+  
+  {% if all_products %}
+    {% with products=all_products header="All Products" %}
+      {% include "merchstore/items-list.html" %}
+    {% endwith %}
+  {% endif %}  
+
 
   
 </main>

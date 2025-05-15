@@ -27,6 +27,8 @@ def item_list(request):
         all_products = Product.objects.all()
         your_products = []
 
+    print(all_products, your_products)
+
     ctx = {
         "all_products": all_products,
         "your_products": your_products
