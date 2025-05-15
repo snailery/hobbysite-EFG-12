@@ -19,10 +19,10 @@ class CommissionListView(ListView):
         # All commissions owned by a user
         context["commissions_owned"] = Commission.objects.filter(author=profile)
         # All commissions applied to by a user
-        dict = {}  # { job_application : commission}
+        commissions_applied = set()
         for job_application in profile.job_applications.all():
-            dict[job_application] = job_application.job.commission
-        context["commissions_applied"] = dict.values()
+            commissions_applied.add(job_application.job.commission)
+        context["commissions_applied"] = commissions_applied
         return context
 
 
