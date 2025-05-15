@@ -13,6 +13,18 @@ class CommissionListView(ListView):
     model = Commission
     template_name = 'commissions/commissions.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = self.request.user.profile
+        # All commissions owned by a user
+        context["commissions_owned"] = Commission.objects.filter(author=profile)
+        # All commissions applied to by a user
+        dict = {}  # { job_application : commission}
+        for job_application in profile.job_applications.all():
+            dict[job_application] = job_application.job.commission
+        context["commissions_applied"] = dict.values()
+        return context
+
 
 def commission_detail(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
