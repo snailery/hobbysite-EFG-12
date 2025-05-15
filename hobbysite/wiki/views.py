@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 
 from .models import Article, ArticleCategory, Comment
 from .forms import ArticleForm, CommentForm
-from user_management.models import Profile
+from profile.models import Profile
 
 def index(request):
     return HttpResponse("Wiki Home")

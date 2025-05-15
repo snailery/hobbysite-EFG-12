@@ -7,24 +7,14 @@ from django.contrib.auth.decorators import login_required
 from .forms import ProductForm
 from .models import Product, ProductType
 
-<<<<<<< HEAD
-# Create your views here.
-class ItemListView(ListView):
-    model = Product
-    template_name = 'items.html'
-=======
 
 # class ItemListView(ListView):
 #     model = Product
 #     template_name = 'merchstore/items.html'
->>>>>>> 071a3466f515c30100b2cbf46106e1bda710f471
 
 
 class ItemDetailView(DetailView):
     model = Product
-<<<<<<< HEAD
-    template_name = 'item.html'
-=======
     template_name = 'merchstore/item.html'
 
 
@@ -102,4 +92,3 @@ class ItemUpdateView(UpdateView):
        return reverse("merchstore:item", kwargs={"pk": pk})
 
 
->>>>>>> 071a3466f515c30100b2cbf46106e1bda710f471

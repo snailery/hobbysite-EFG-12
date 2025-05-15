@@ -21,6 +21,9 @@
                 <ul>
                     <h3><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a>
                 </ul>
-            {% endif % }
+            {% endif %}
         {% endfor %}
+    
+    <a href="{{ article.get_absolute_url }}">Back</a>
+
 {% endblock %}
