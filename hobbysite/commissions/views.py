@@ -42,7 +42,7 @@ def commission_detail(request, pk):
         "total_manpower": total_manpower,
         "apply_form": apply_form
     }
-    return render(request, "commission.html", ctx)
+    return render(request, "commissions/commission.html", ctx)
 
 
 @login_required
@@ -66,7 +66,7 @@ def commission_create(request):
         "commission_form": commission_form,
         "jobs_formset": jobs_formset
     }
-    return render(request, "commission_create.html", ctx)
+    return render(request, "commissions/commission_create.html", ctx)
 
 
 @login_required
@@ -127,4 +127,4 @@ def commission_update(request, pk):
         "jobs_formset": jobs_formset,
         "job_application_formset": job_application_formset
     }
-    return render(request, "commission_update.html", ctx)
+    return render(request, "commissions/commission_update.html", ctx)
