@@ -6,3 +6,8 @@ class ProfileDisplayNameForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['display_name']
+        widgets = {
+            'display_name': forms.TextInput(attrs={
+                'class': 'form-control'
+            })
+        }
