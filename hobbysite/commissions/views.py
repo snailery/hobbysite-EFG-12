@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 class CommissionListView(ListView):
     model = Commission
-    template_name = 'commissions.html'
+    template_name = 'commissions/commissions.html'
 
 
 def commission_detail(request, pk):

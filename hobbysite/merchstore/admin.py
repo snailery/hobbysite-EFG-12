@@ -14,7 +14,8 @@ class ProductTypeAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     model = Product
     search_fields = ("name", )
-    list_display = ("name", "desc", "price", "stock", "status", "prod_type", "owner")
+    list_display = ("name", "desc", "price", "stock",
+                    "status", "prod_type", "owner")
 
     fieldsets = [
         ("Details", {
