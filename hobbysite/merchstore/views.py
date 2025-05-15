@@ -1,7 +1,7 @@
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import render, redirect, reverse
-from user_management.models import Profile
+from profile.models import Profile
 from django.contrib.auth.decorators import login_required
 
 from .forms import ProductForm
