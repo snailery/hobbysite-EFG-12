@@ -5,4 +5,4 @@ urlpatterns = [
     path("<str:username>/", passport, name="username"),
 ]
 
-app_name = "user_management"
+app_name = "profile"

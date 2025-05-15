@@ -9,4 +9,4 @@ def passport(request, username):
         'user': user,
         'profile': user.profile
     }
-    return render(request, 'user_management/passport.html', ctx)
+    return render(request, 'passport.html', ctx)
