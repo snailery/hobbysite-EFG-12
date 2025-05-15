@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from .models import Profile
 
 
 def passport(request, username):
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, username=username)
     ctx = {
         'user': user,
         'profile': user.profile
