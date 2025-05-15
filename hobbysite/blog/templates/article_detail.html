@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }} - Blog App{% endblock %}
+
+{% block content %}
+  <article>
+    <h2>{{ article.title }}</h2>
+    <p><em>By {{ article.author }}, posted on {{ article.created_on|date:"M d, Y" }}</em></p>
+
+    {% if article.header_image %}
+      <img src="{{ article.header_image.url }}" alt="Header image for {{ article.title }}" style="max-width:100%; margin-bottom:20px;" />
+    {% endif %}
+
+    <div>
+      {{ article.entry|linebreaks }}
+    </div>
+
+    {% if user.is_authenticated and user.profile == article.author %}
+      <p><a href="{% url 'article_update' article.pk %}">Edit this article</a></p>
+    {% endif %}
+
+    <hr />
+
+    <h3>More articles by {{ article.author }}</h3>
+    <ul>
+      {% for other_article in related_articles|slice:":2" %}
+        <li><a href="{% url 'article_detail' other_article.pk %}">{{ other_article.title }}</a></li>
+      {% empty %}
+        <li>No other articles by this author.</li>
+      {% endfor %}
+    </ul>
+
+    <hr />
+
+    <h3>Leave a comment</h3>
+    {% if user.is_authenticated %}
+      <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Post Comment</button>
+      </form>
+    {% else %}
+      <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to comment.</p>
+    {% endif %}
+
+    <hr />
+
+    <h3>Comments ({{ comments.count }})</h3>
+    {% if comments %}
+      <ul>
+        {% for comment in comments %}
+          <li>
+            <strong>{{ comment.author }}</strong> — <em>{{ comment.created_on|date:"M d, Y H:i" }}</em>
+            <p>{{ comment.entry|linebreaks }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments yet.</p>
+    {% endif %}
+
+    <p><a href="{% url 'article_list' %}">Back to Articles</a></p>
+  </article>
+{% endblock %}

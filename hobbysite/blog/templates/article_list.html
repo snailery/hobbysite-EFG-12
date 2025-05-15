@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Articles - Blog App{% endblock %}
+
+{% block content %}
+  <h2>Your Articles</h2>
+  {% if articles_by_user %}
+    <ul>
+      {% for article in articles_by_user %}
+        <li><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a> — {{ article.category.name }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't written any articles yet.</p>
+  {% endif %}
+
+  <hr />
+
+  <h2>All Articles by Category</h2>
+  {% for category in categories %}
+    <section>
+      <h3>{{ category.name }}</h3>
+      <ul>
+        {% for article in category.articles.exclude(author=request.user.profile) %}
+          <li><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a></li>
+        {% empty %}
+          <li>No articles in this category.</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% empty %}
+    <p>No categories found.</p>
+  {% endfor %}
+{% endblock %}
