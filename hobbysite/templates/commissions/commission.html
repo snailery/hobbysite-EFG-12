@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Commission{% endblock %}
+
+{% block content %}
+    <h1>{{ commission.title }}</h1>
+    <ul>
+        <li><b>Created On: </b>{{ commission.created_on }}</li>
+        <li><b>Last Updated On: </b>{{ commission.updated_on }}</li>
+        <li><b>Status: </b>{{ commission.status }}</li>
+        <li><b>Total Manpower: </b>{{ total_manpower }}</li>
+        <li><b>Open Manpower: </b>{{ open_manpower }}</li>
+    </ul>
+    <p>{{ commission.description }}</p>
+
+    <h2>Jobs</h2>
+    {% for job in commission.jobs.all %}
+    <div>
+        <h3>Job: {{ job.role }}</h3>
+        <ul>
+            <li><b>Status: </b>{{ job.status }}</li>
+            <li><b>Manpower Required: </b>{{ job.manpower_required }}</li>
+        </ul>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="job_id" value="{{ job.id }}">
+            <button type="submit">Apply to Job</button>
+        </form>
+    </div>
+{% endfor %}
+
+{% endblock %}
