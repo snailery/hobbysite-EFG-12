@@ -12,7 +12,7 @@ def passport(request, username):
         form = ProfileDisplayNameForm(request.POST, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('passport', username=username)
+            return redirect('profile:profile', username=username)
     else:
         form = ProfileDisplayNameForm(instance=profile)
 
