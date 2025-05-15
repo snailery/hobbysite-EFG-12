@@ -27,7 +27,7 @@ urlpatterns = [
     path("blog/", include("blog.urls", namespace='blog')),
     path("forum/", include("forum.urls", namespace='forum')),
     path("commissions/", include("commissions.urls", namespace='commissions')),
-    path("profile/", include("user_management.urls", namespace='user_management')),
+    path("profile/", include("profile.urls", namespace='profile')),
     path("accounts/", include("django.contrib.auth.urls")),
     path("admin/", admin.site.urls),
 ]
