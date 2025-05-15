@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
+
 
 class CommissionListView(ListView):
     model = Commission
@@ -42,6 +44,7 @@ def commission_detail(request, pk):
     return render(request, "commission.html", ctx)
 
 
+@login_required
 def commission_create(request):
     if (request.method == "POST"):
         commission_form = CommissionForm(request.POST)
@@ -63,6 +66,7 @@ def commission_create(request):
     return render(request, "commission_create.html", ctx)
 
 
+@login_required
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
     # Check Commission Status
