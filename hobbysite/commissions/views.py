@@ -15,14 +15,15 @@ class CommissionListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile = self.request.user.profile
-        # All commissions owned by a user
-        context["commissions_owned"] = Commission.objects.filter(author=profile)
-        # All commissions applied to by a user
-        commissions_applied = set()
-        for job_application in profile.job_applications.all():
-            commissions_applied.add(job_application.job.commission)
-        context["commissions_applied"] = commissions_applied
+        if self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            # All commissions owned by a user
+            context["commissions_owned"] = Commission.objects.filter(author=profile)
+            # All commissions applied to by a user
+            commissions_applied = set()
+            for job_application in profile.job_applications.all():
+                commissions_applied.add(job_application.job.commission)
+            context["commissions_applied"] = commissions_applied
         return context
 
 
