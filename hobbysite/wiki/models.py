@@ -29,7 +29,7 @@ class Article(models.Model):
         return f"[{self.category_type.name}] {self.title} (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
 
     def get_absolute_url(self):
-        return reverse('wiki:article', args=[str(self.pk)])
+        return reverse('wiki:article_detail', args=[str(self.pk)])
 
     class Meta:
         ordering = ['-created_on']

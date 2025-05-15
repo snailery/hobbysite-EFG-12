@@ -1,10 +1,10 @@
-{% extends base.html %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
-    <form method="POST"></form>
+    <form method="POST">
         {% csrf_token %}
-        {{ form }}
+        {{ form.as_p }}
         <button type="submit">Post</button>
     </form>
 

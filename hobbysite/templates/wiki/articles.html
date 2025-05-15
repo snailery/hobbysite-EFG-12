@@ -9,7 +9,7 @@
         <ul>
             {% for personal_article in my_articles %}
                 <ul>
-                    <a href="{{ my_articles.get_absolute_url }}">{{ my_articles }}</a>
+                    <a href="{{ personal_article.get_absolute_url }}">{{ personal_article }}</a>
                 </ul>
             {% endfor %}
         </ul>
@@ -19,11 +19,8 @@
         {% for article in all_articles %}
             {% if article not in my_articles %}
                 <ul>
-                    <h3><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a>
+                    <h3><a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
                 </ul>
             {% endif %}
-        {% endfor %}
-    
-    <a href="{{ article.get_absolute_url }}">Back</a>
-
+        {% endfor %}    
 {% endblock %}

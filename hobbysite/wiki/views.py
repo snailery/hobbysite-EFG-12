@@ -16,19 +16,18 @@ def index(request):
 class ArticleListView(ListView):
     model = Article
     template_name = 'wiki/articles.html'
+    context_object_name = 'all_articles'
     queryset = Article.objects.order_by('category_type')
 
-def render_articles(request):
-    categories = ArticleCategory.objects.all()
-    if request.user.is_authenticated:
-        ctx = {
-            'my_articles': Article.objects.filter(author=Profile.objects.get(user=request.user)),
-            'all_articles': categories
-        }
-    else:
-        ctx = {
-            'all_articles': categories
-        }
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user)
+            my_articles = Article.objects.filter(author=profile)
+            ctx ['my_articles'] = my_articles
+        else:
+            ctx['my_articles'] = Article.objects.none()
+        return ctx
 
 class ArticleDetailView(DetailView):
     model = Article
@@ -63,8 +62,8 @@ class ArticleDetailView(DetailView):
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
-    template_name = 'wiki/article.html'
-    exclude = ['created_on', 'updated_on', 'author']
+    form_class = ArticleForm
+    template_name = 'wiki/create_article.html'
 
     def get_success_url(self):
         return reverse_lazy('wiki:article_detail', kwargs={ 'pk': self.object.pk})
@@ -77,12 +76,12 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         author = Profile.objects.get(user=self.request.user)
         ctx = super().get_context_data(**kwargs)
-        ctx['create_article'] = ArticleForm(initial={'author': author})
         return ctx
 
 class ArticleUpdateView(UpdateView):
     model = Article
-    template_name = 'wiki/article.html'
+    form_class = ArticleForm
+    template_name = 'wiki/update_article.html'
 
     def get_success_url(self):
         return reverse_lazy('wiki:article_detail', kwargs={ 'pk': self.object.pk})

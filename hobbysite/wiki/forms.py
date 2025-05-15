@@ -3,10 +3,9 @@ from .models import ArticleCategory, Article, Comment
 
 
 class ArticleForm(forms.ModelForm):
-    category = forms.ModelChoiceField(queryset=ArticleCategory.objects.all(), empty_label="Choose a category")
     class Meta:
         model = Article
-        fields = ['title', 'entry', 'category'] 
+        fields = ['title', 'entry', 'category_type'] 
 
 class CommentForm(forms.ModelForm):
     class Meta:
