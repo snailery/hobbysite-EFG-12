@@ -5,11 +5,16 @@
 {% block content %}
     <form method="post">
         {% csrf_token %}
-        {{ commission_form }}
+        <h1>Create Commission</h1>
+        <div class="card" style="padding: 1em; margin-bottom: 1em;">
+            {{ commission_form }}
+        </div>
+
+        <h2>Jobs</h2>
         {{ jobs_formset.management_form }}
         {% for job_form in jobs_formset %}
-            <p>{{ job_form }}</p>
+            <div class="card" style="padding: 1em">{{ job_form }}</div>
         {% endfor %}
-        <button type="submit">Create Commission with Job Openings</button>
+        <button type="submit" class="btn btn-primary" style="margin-top: 1em;">Create Commission with Job Openings</button>
     </form>
 {% endblock %}
