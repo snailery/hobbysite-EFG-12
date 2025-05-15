@@ -1,11 +1,24 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 class Commission(models.Model):
     title = models.CharField(max_length=255)
+    # TODO author = foreign key
     description = models.TextField()
-    people_required = models.PositiveIntegerField()
+
+    class StatusChoices(models.TextChoices):
+        OPEN = "OPEN"
+        FULL = "FULL"
+        COMPLETED = "COMPLETED"
+        DISCONTINUED = "DISCONTINUED"
+    status = models.CharField(
+        max_length=12,
+        choices=StatusChoices,
+        default=StatusChoices.OPEN,
+    )
+
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
 
@@ -19,21 +32,59 @@ class Commission(models.Model):
         ordering = ['created_on']
 
 
-class Comment(models.Model):
+class Job(models.Model):
     commission = models.ForeignKey(
         Commission,
         on_delete=models.CASCADE,
-        related_name='comments'
+        related_name='jobs'
     )
-    entry = models.TextField()
-    created_on = models.DateTimeField(auto_now_add=True, editable=False)
-    updated_on = models.DateTimeField(auto_now=True, editable=False)
+    role = models.CharField(max_length=255)
+    manpower_required = models.PositiveIntegerField()
+
+    class StatusChoices(models.TextChoices):
+        OPEN = "OPEN"
+        FULL = "FULL"
+    status = models.CharField(
+        max_length=4,
+        choices=StatusChoices,
+        default=StatusChoices.OPEN,
+    )
 
     def __str__(self):
-        return f"[{self.commission}] {self.entry}"
+        return f"{self.role}" # TODO include Profile?
 
     def get_absolute_url(self):
         return reverse('commissions:commission', args=[str(self.commission.pk)])
 
     class Meta:
-        ordering = ['-created_on']
+        ordering = ["-status", "-manpower_required", "role"]
+
+
+class JobApplication(models.Model):
+    job = models.ForeignKey(
+        Job,
+        on_delete=models.CASCADE,
+        related_name='job_applications'
+    )
+    # TODO Applicant foreign key Profile
+
+    class StatusChoices(models.TextChoices):
+        PENDING = "A", _("Pending")
+        ACCEPTED = "B", _("Accepted")
+        REJECTED = "C", _("Rejected")
+    status = models.CharField(
+        max_length=8,
+        choices=StatusChoices,
+        default=StatusChoices.PENDING,
+    )
+
+    applied_on = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return f"[{self.job}] {self.status}"
+
+    def get_absolute_url(self):
+        return reverse('commissions:commission', args=[str(self.commission.pk)])
+
+    class Meta:
+        ordering = ["status", "-applied_on"]

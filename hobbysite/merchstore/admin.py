@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, ProductType, Transaction
+from .models import Product, ProductType
 
 
 class ProductInline(admin.TabularInline):
@@ -14,30 +14,12 @@ class ProductTypeAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     model = Product
     search_fields = ("name", )
-    list_display = ("name", "desc", "price", "stock", "status", "prod_type", "owner")
+    list_display = ("name", "desc", "price", "prod_type")
 
     fieldsets = [
         ("Details", {
             "fields": [
-                ("name", "desc", "price", "stock", "status"), "prod_type", "owner"
-            ]
-        }),
-    ]
-
-
-class TransactionInline(admin.TabularInline):
-    model = Transaction
-
-
-class TransactionAdmin(admin.ModelAdmin):
-    model = Transaction
-    search_fields = ("product", )
-    list_display = ("product", "amount", "buyer", "status")
-
-    fieldsets = [
-        ("Details", {
-            "fields": [
-                "product", ("amount", "status"), "buyer"
+                ("name", "desc", "price"), "prod_type"
             ]
         }),
     ]
@@ -45,4 +27,3 @@ class TransactionAdmin(admin.ModelAdmin):
 
 admin.site.register(ProductType, ProductTypeAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Transaction, TransactionAdmin)
