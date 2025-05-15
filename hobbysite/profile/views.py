@@ -1,11 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import ProfileDisplayNameForm
 
 
+@login_required
 def passport(request, username):
     user = get_object_or_404(User, username=username)
+    if request.user != user:
+        return redirect('profile:profile', username=request.user.username)
     profile, _ = Profile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
