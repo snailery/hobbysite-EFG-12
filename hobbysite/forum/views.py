@@ -50,21 +50,15 @@ class ThreadDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        selected_thread = self.get_object()
+        thread = self.get_object()
 
-        # Get more threads in the same category for sidebar/related content
-        related = models.Thread.objects.filter(
-            category=selected_thread.category
-        ).exclude(pk=selected_thread.pk)[:2]
+        context["related_threads"] = models.Thread.objects.filter(
+            category=thread.category
+        ).exclude(pk=thread.pk)[:2]
 
-        context["related_threads"] = related
-        context["comments"] = selected_thread.comments.order_by("created_on")
-
-        if self.request.user.is_authenticated:
-            context["comment_form"] = forms.CommentForm()
-            context["can_edit"] = self.request.user == selected_thread.author.user
-        else:
-            context["can_edit"] = False
+        context["comments"] = thread.comments.order_by("created_on")
+        context["comment_form"] = kwargs.get("comment_form", forms.CommentForm())
+        context["can_edit"] = self.request.user.is_authenticated and thread.author.user == self.request.user
 
         return context
 
