@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Profile - WIP</h1>
+  <h1>Profile</h1>
   <div class="d-flex justify-content-center">
     <div class="card shadow-sm p-10 w-50">
       <form method="POST">
@@ -26,8 +26,11 @@
           </div>
           <input type="text" class="form-control form-control-solid ps-12" value="{{ user.email }}" id="email" disabled />
         </div>
-
-        <button type="submit">Update</button>
+        
+        <hr>
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
       </form>
     </div>
 
