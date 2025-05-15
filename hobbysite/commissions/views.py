@@ -13,6 +13,19 @@ class CommissionListView(ListView):
     model = Commission
     template_name = 'commissions/commissions.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            # All commissions owned by a user
+            context["commissions_owned"] = Commission.objects.filter(author=profile)
+            # All commissions applied to by a user
+            commissions_applied = set()
+            for job_application in profile.job_applications.all():
+                commissions_applied.add(job_application.job.commission)
+            context["commissions_applied"] = commissions_applied
+        return context
+
 
 def commission_detail(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
@@ -72,6 +85,10 @@ def commission_create(request):
 @login_required
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
+
+    if request.user.profile != commission.author:
+        return redirect("commissions:commissions")
+
     # Check Commission Status
     is_commission_full = True
     if (commission.jobs.filter(status="OPEN").exists()):
