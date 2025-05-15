@@ -30,6 +30,7 @@ def commission_detail(request, pk):
         if apply_form.is_valid():
             job_application = apply_form.save(commit=False)
             job_application.job = job
+            job_application.applicant = request.user.profile
             job_application.save()
             return redirect("commissions:commission", pk=commission.pk)
     else:
@@ -51,7 +52,9 @@ def commission_create(request):
         jobs_formset = JobFormSet(request.POST)
 
         if commission_form.is_valid() and jobs_formset.is_valid():
-            commission = commission_form.save()
+            commission = commission_form.save(commit=False)
+            commission.author = request.user.profile
+            commission.save()
             jobs_formset.instance = commission
             jobs_formset.save()
             return redirect('commissions:commission', pk=commission.pk)
@@ -85,7 +88,9 @@ def commission_update(request, pk):
 
         # Form Validation
         if commission_form.is_valid() and jobs_formset.is_valid() and job_application_formset.is_valid():
-            commission = commission_form.save()
+            commission = commission_form.save(commit=False)
+            commission.author = request.user.profile
+            commission.save()
             jobs_formset.save()
             job_application_formset.save()
 
