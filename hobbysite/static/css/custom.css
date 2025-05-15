@@ -24,7 +24,17 @@
   color: #725C4E !important;
 }
 
+.ratio-square {
+  aspect-ratio: 1 / 1 !important;
+}
 
+.left-0 {
+  left: 0 !important;
+}
+
+.right-0 {
+  right: 0 !important;
+}
 
 /* Custom Font */
 
@@ -219,7 +229,7 @@ figcaption div.pfp, figcaption img.pfp {
   width: 18px;
 }
 
-#product-details figcaption.card {
+#product-details figcaption.card, #product-details form {
   max-height: calc(100% - 21px);
 }
 
@@ -235,4 +245,8 @@ figcaption div.pfp, figcaption img.pfp {
   top: 15%;
   left: -2rem;
   position: absolute;
+}
+
+#product-details #owner + div {
+  height: calc(100% - 2 * 0.775rem);
 }

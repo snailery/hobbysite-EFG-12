@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Item {{ product.name }}{% endblock %}
+{% block content %}
+<!-- Top Decoration -->
+<div class="position-absolute top-0 start-0 w-100 z-index-1" id="wave-top">
+  <svg width="current" height="200" preserveAspectRatio="none" viewBox="0 0 1207 323" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path opacity="0.5" d="M393.686 289.889C269.07 349.595 80.0871 314.767 1.17236 289.889V0H1207V291.082C1193.19 293.462 1158.06 300.543 1128.03 309.831C971.466 344.495 823.963 302.252 762.622 280.137C571.828 235.268 412.286 285.005 393.686 289.889Z" fill="#E1E3EA"/>
+    <path d="M397.573 266.969C294.093 289.534 89.9594 276.371 0.827637 266.969V0H1206.66V266.969C1138.07 283.894 889.195 281.728 824.147 266.969C672.841 241.122 458.405 255.329 397.573 266.969Z" fill="#E1E3EA"/>
+  </svg>    
+</div>
+
+<main class="position-relative text-arial-rounded z-index-2 ribbon ribbon-start" id="product-details">
+  <div class="d-flex flex-column gap-3 ribbon-group ps-md-0 ps-3">
+    <div class="ribbon-label bg-green position-relative fs-3 text-white w-fit">
+      <svg width="18" height="20" viewBox="0 0 18 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M0.157591 12.8196C0.947089 8.48517 4.9371 6.4534 7.24707 6.23464C7.18509 4.85238 8.08863 4.46896 8.54815 4.45003V2.54126C8.54815 1.57465 9.70809 0.294812 11.5287 0.28013C13.3494 0.265447 13.9843 1.86587 13.9073 2.54126C14.6591 2.69396 15.1467 3.2493 15.2965 3.50788C15.6219 4.17465 15.9814 5.57861 14.8164 5.86025C13.6514 6.1419 13.7763 6.54303 13.9843 6.70839C14.334 6.85256 15.2621 7.42087 16.1773 8.54074C17.0924 9.66061 16.9836 10.2209 16.8148 10.3611C16.6165 10.4355 16.2868 10.6641 16.5545 10.9839C16.8222 11.3037 17.0548 11.7891 17.1376 11.9918C17.4111 12.9008 17.6299 15.1194 16.3171 16.7218C14.6761 18.7248 11.0498 19.8175 5.13989 19.0149C0.411944 18.3728 -0.157691 14.6598 0.157591 12.8196ZM3.77314 13.5406C4.27607 12.7741 3.86295 11.8541 3.59352 11.4898C3.52866 11.405 3.34505 11.1455 3.12949 10.7863C2.75826 10.2235 3.28417 10.1526 3.59352 10.1875H4.82099C5.43173 10.1875 5.95365 9.78835 6.13826 9.58876C6.07839 9.62868 6.13826 9.53487 6.85678 8.8403C7.75492 7.97209 7.90461 8.63073 7.90461 8.8403C7.90461 9.04986 8.08424 9.93303 8.11418 10.0678C8.14412 10.2025 8.95244 10.8761 10.0452 11.1006C10.9194 11.2802 10.7487 11.7543 10.5541 11.9688C10.3595 12.1085 9.83861 12.4598 9.3117 12.7472C8.78479 13.0346 8.683 13.5456 8.69797 13.7651C8.69298 13.81 8.686 14.1363 8.69797 15.0824C8.70995 16.0284 8.11418 15.7959 7.8148 15.5614C7.5254 15.3369 6.86875 14.8249 6.5574 14.5734C6.24604 14.322 5.71913 14.4687 5.4946 14.5734C5.34989 14.6283 4.90781 14.807 4.29707 15.0824C3.68634 15.3578 3.44384 15.1971 3.39894 15.0824C3.31411 14.8878 3.2702 14.307 3.77314 13.5406ZM8.92413 5.22219C9.85608 5.43965 11.8505 5.91494 12.3723 6.07648C12.9321 6.24973 12.9429 6.40011 12.9642 6.69443C12.9677 6.74312 12.9715 6.79576 12.9781 6.85309C13.3881 6.96492 15.1578 8.69108 15.9914 9.54018C16.1001 9.70068 16.1444 9.90982 15.8516 10.2236C15.6776 10.41 15.5513 10.4773 15.5099 10.4877C15.0299 9.76427 13.9003 8.22338 13.2212 7.84683C13.91 8.9604 14.5988 10.5217 14.2429 10.9694C13.9582 11.3276 13.2811 11.1569 12.9781 11.0268C12.9864 9.92305 12.7322 7.62928 11.6484 7.28431C10.5647 6.93933 8.82347 6.46906 8.08831 6.27705C7.98752 6.23001 7.84641 6.019 8.08831 5.55129C8.35191 5.04163 8.65916 5.1396 8.84865 5.20002C8.87653 5.20891 8.90186 5.21698 8.92413 5.22219Z"/>
+      </svg>  
+      <p class="m-0 ps-2"><span class="fw-bold">PHP </span> {{ product.price }}</p>
+    </div>
+    <div class="ribbon-label bg-app-yellow position-relative justify-content-start fs-3 text-brown w-fit">
+      <svg width="19" height="20" viewBox="0 0 19 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <g id="Stock Icon">
+        <path id="Exclude" fill-rule="evenodd" clip-rule="evenodd" d="M8.28603 0.733246C9.00743 0.362681 9.86325 0.362681 10.5847 0.733245L14.1099 2.54408L17.4195 4.25949C18.2519 4.69096 18.7753 5.5496 18.7773 6.4872L18.7845 9.78024L18.7773 13.0733C18.7753 14.0109 18.2519 14.8695 17.4195 15.301L14.1099 17.0164L10.5847 18.8272C9.86325 19.1978 9.00743 19.1978 8.28603 18.8272L4.76076 17.0164L1.4512 15.301C0.61877 14.8695 0.0954091 14.0109 0.0933642 13.0733L0.0861816 9.78024L0.0933642 6.4872C0.0954091 5.5496 0.618771 4.69096 1.4512 4.25949L4.76076 2.54408L8.28603 0.733246ZM9.0023 1.92405C9.32882 1.77923 9.7015 1.78008 10.0274 1.92639L13.6104 3.53518L15.11 4.20816C16.1078 4.65593 16.0981 6.07594 15.0942 6.50998L13.5855 7.16231L10.0363 8.74247C9.70518 8.88988 9.32657 8.88729 8.99751 8.73534L5.47031 7.10663L3.97069 6.43365C2.9729 5.98588 2.98264 4.56587 3.98649 4.13183L5.4952 3.47949L9.0023 1.92405ZM3.55872 8.00366C3.11169 7.78035 2.56826 7.96171 2.34495 8.40875C2.12163 8.85578 2.30299 9.39921 2.75003 9.62252L4.79749 10.6453C5.24452 10.8686 5.78795 10.6873 6.01127 10.2402C6.23458 9.7932 6.05322 9.24978 5.60618 9.02646L3.55872 8.00366Z"/>
+        </g>
+      </svg>
+      <p class="m-0 ps-2"><span class="fw-bold">Stock: </span> {{ product.stock }}</p>
+    </div>
+  </div>
+
+  <ol class="breadcrumb breadcrumb-arrow text-muted fs-6 fw-bold text-poppins">
+    <li class="breadcrumb-item">
+      <a href="/" class="">
+        <i class="ki-duotone ki-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item"><a href="#" class="text-muted">MerchStore</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'merchstore:items' %}" class="text-muted">Items</a></li>
+    <li class="breadcrumb-item text-gray-800">Create New Product</li>
+  </ol>
+
+  <!-- Alert-->
+  {% if form.non_field_errors %}
+    <div class="alert alert-dismissible alert-danger d-flex flex-column flex-sm-row p-5 mb-10 mx-auto z-index-3 w-100 w-lg-900px position-absolute top-0 left-0 right-0">
+      <i class="ki-duotone ki-information-5 fs-2hx text-danger me-4 d-none d-md-block">
+        <span class="path1"></span>
+        <span class="path2"></span>
+        <span class="path3"></span>
+      </i>
+
+      <div class="d-flex flex-column text-danger pe-0 pe-sm-10">
+          <h4 class="mb-2 text-danger d-flex d-md-inline">
+            <i class="ki-duotone ki-information-5 fs-1 text-danger me-4 d-md-none d-block ">
+              <span class="path1"></span>
+              <span class="path2"></span>
+              <span class="path3"></span>
+            </i>
+            Form Submission Failure
+          </h4>
+          <span>The following errors have occured:</span>
+          <ul class="mb-0 pb-0">
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>            
+            {% endfor %}
+          </ul>
+      </div>
+      <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
+        <i class="fa-solid fa-xmark text-danger fs-2"></i>
+      </button>
+    </div>
+   
+  {% endif %}
+
+  <article class="d-flex flex-column flex-lg-row justify-content-between align-items-center align-items-lg-center h-100 w-lg-900px w-100 m-auto">
+    <figure class="h-50 h-lg-100 w-400px bg-gray-400 opacity-0">
+
+    </figure>
+
+    <form method="POST" class="card d-flex flex-col gap-9 p-9 w-100 w-md-500px h-fit overflow-y-auto text-poppins">
+      {% csrf_token %}
+      <h2 class="text-arial-rounded">Create New Product</h2>
+      <div>
+        <label for="name" class="required form-label fw-bold">Product Name</label>
+        {{ form.name }}
+      </div>
+      
+      <div>
+        <label for="owner" class="form-label fw-bold">Owner</label>
+        <div class="position-relative">
+          <input type="text" id="owner" class="form-control form-control-solid text-decoration-underline text-gray-500 ps-13" value="{{ request.user }}" disabled/>
+          <div class="position-absolute translate-middle-y top-50 start-0 ms-3 bg-gray-300 ratio-square rounded-circle">
+            {% comment %} <img src="" alt="{{ request.user.username|slice:"0:1" }}"> {% endcomment %}
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-row gap-9">
+        <div class="w-100">
+          <label for="prod_type" class="required form-label fw-bold">Type</label>
+          {{ form.prod_type }}
+        </div>
+        
+        <div class="w-100">
+          <label for="status" class="required form-label fw-bold">Status</label>
+          {{ form.status }}
+        </div>
+      </div>
+
+      <div>
+        <label for="desc" class="form-label fw-bold">Description</label>
+        {{ form.desc }}
+      </div>
+      
+      
+      <div class="d-flex flex-row gap-9">
+        <div>
+          <label for="price" class="required form-label fw-bold">Price</label>
+          <div class="input-group input-group-solid mb-5">
+            <span class="input-group-text text-muted">
+              <svg width="18" height="20" viewBox="0 0 18 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M0.157591 12.8196C0.947089 8.48517 4.9371 6.4534 7.24707 6.23464C7.18509 4.85238 8.08863 4.46896 8.54815 4.45003V2.54126C8.54815 1.57465 9.70809 0.294812 11.5287 0.28013C13.3494 0.265447 13.9843 1.86587 13.9073 2.54126C14.6591 2.69396 15.1467 3.2493 15.2965 3.50788C15.6219 4.17465 15.9814 5.57861 14.8164 5.86025C13.6514 6.1419 13.7763 6.54303 13.9843 6.70839C14.334 6.85256 15.2621 7.42087 16.1773 8.54074C17.0924 9.66061 16.9836 10.2209 16.8148 10.3611C16.6165 10.4355 16.2868 10.6641 16.5545 10.9839C16.8222 11.3037 17.0548 11.7891 17.1376 11.9918C17.4111 12.9008 17.6299 15.1194 16.3171 16.7218C14.6761 18.7248 11.0498 19.8175 5.13989 19.0149C0.411944 18.3728 -0.157691 14.6598 0.157591 12.8196ZM3.77314 13.5406C4.27607 12.7741 3.86295 11.8541 3.59352 11.4898C3.52866 11.405 3.34505 11.1455 3.12949 10.7863C2.75826 10.2235 3.28417 10.1526 3.59352 10.1875H4.82099C5.43173 10.1875 5.95365 9.78835 6.13826 9.58876C6.07839 9.62868 6.13826 9.53487 6.85678 8.8403C7.75492 7.97209 7.90461 8.63073 7.90461 8.8403C7.90461 9.04986 8.08424 9.93303 8.11418 10.0678C8.14412 10.2025 8.95244 10.8761 10.0452 11.1006C10.9194 11.2802 10.7487 11.7543 10.5541 11.9688C10.3595 12.1085 9.83861 12.4598 9.3117 12.7472C8.78479 13.0346 8.683 13.5456 8.69797 13.7651C8.69298 13.81 8.686 14.1363 8.69797 15.0824C8.70995 16.0284 8.11418 15.7959 7.8148 15.5614C7.5254 15.3369 6.86875 14.8249 6.5574 14.5734C6.24604 14.322 5.71913 14.4687 5.4946 14.5734C5.34989 14.6283 4.90781 14.807 4.29707 15.0824C3.68634 15.3578 3.44384 15.1971 3.39894 15.0824C3.31411 14.8878 3.2702 14.307 3.77314 13.5406ZM8.92413 5.22219C9.85608 5.43965 11.8505 5.91494 12.3723 6.07648C12.9321 6.24973 12.9429 6.40011 12.9642 6.69443C12.9677 6.74312 12.9715 6.79576 12.9781 6.85309C13.3881 6.96492 15.1578 8.69108 15.9914 9.54018C16.1001 9.70068 16.1444 9.90982 15.8516 10.2236C15.6776 10.41 15.5513 10.4773 15.5099 10.4877C15.0299 9.76427 13.9003 8.22338 13.2212 7.84683C13.91 8.9604 14.5988 10.5217 14.2429 10.9694C13.9582 11.3276 13.2811 11.1569 12.9781 11.0268C12.9864 9.92305 12.7322 7.62928 11.6484 7.28431C10.5647 6.93933 8.82347 6.46906 8.08831 6.27705C7.98752 6.23001 7.84641 6.019 8.08831 5.55129C8.35191 5.04163 8.65916 5.1396 8.84865 5.20002C8.87653 5.20891 8.90186 5.21698 8.92413 5.22219Z"/>
+              </svg>
+            </span>
+            {{ form.price }}
+            {% comment %} <input id="price" type="text" class="form-control" placeholder="00.00" required/> {% endcomment %}
+            <span class="input-group-text">PHP</span>
+          </div>
+        </div>
+        
+        <div>
+          <label for="stock" class="required form-label fw-bold">Stock</label>
+          <div class="input-group input-group-solid mb-5">
+            <span class="input-group-text text-muted">
+              <svg width="19" height="20" viewBox="0 0 19 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <g id="Stock Icon">
+                <path id="Exclude" fill-rule="evenodd" clip-rule="evenodd" d="M8.28603 0.733246C9.00743 0.362681 9.86325 0.362681 10.5847 0.733245L14.1099 2.54408L17.4195 4.25949C18.2519 4.69096 18.7753 5.5496 18.7773 6.4872L18.7845 9.78024L18.7773 13.0733C18.7753 14.0109 18.2519 14.8695 17.4195 15.301L14.1099 17.0164L10.5847 18.8272C9.86325 19.1978 9.00743 19.1978 8.28603 18.8272L4.76076 17.0164L1.4512 15.301C0.61877 14.8695 0.0954091 14.0109 0.0933642 13.0733L0.0861816 9.78024L0.0933642 6.4872C0.0954091 5.5496 0.618771 4.69096 1.4512 4.25949L4.76076 2.54408L8.28603 0.733246ZM9.0023 1.92405C9.32882 1.77923 9.7015 1.78008 10.0274 1.92639L13.6104 3.53518L15.11 4.20816C16.1078 4.65593 16.0981 6.07594 15.0942 6.50998L13.5855 7.16231L10.0363 8.74247C9.70518 8.88988 9.32657 8.88729 8.99751 8.73534L5.47031 7.10663L3.97069 6.43365C2.9729 5.98588 2.98264 4.56587 3.98649 4.13183L5.4952 3.47949L9.0023 1.92405ZM3.55872 8.00366C3.11169 7.78035 2.56826 7.96171 2.34495 8.40875C2.12163 8.85578 2.30299 9.39921 2.75003 9.62252L4.79749 10.6453C5.24452 10.8686 5.78795 10.6873 6.01127 10.2402C6.23458 9.7932 6.05322 9.24978 5.60618 9.02646L3.55872 8.00366Z"/>
+                </g>
+              </svg>
+            </span>
+            {{ form.stock }}
+            <span class="input-group-text">PCS</span>
+          </div>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary fw-bold mt-auto">Submit</button>
+    </form>
+  </article>
+</main>
+<div class="position-absolute h-100 w-100 overflow-y-hidden top-0 z-index-0">
+  <div id="shape-background" class="position-absolute"></div>
+</div>
+<!-- Bottom Decoration -->
+<div class="position-absolute bottom-0 start-0 w-100 z-index-1" id="wave-bottom">
+  <svg width="current" height="81" preserveAspectRatio="none" viewBox="0 0 1207 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path opacity="0.5" d="M156.124 21.6945C122.565 21.4885 38.61 14.3381 0.827637 10.7886V80.8606H1206.66V11.6464C1189.48 14.0511 1133.48 19.4789 1046.95 21.9522C960.413 24.4256 895.831 20.0629 874.357 17.5723C849.587 15.597 793.395 10.8735 766.787 7.78177C733.527 3.91709 656.22 0.567504 604.683 0.0522138C563.452 -0.360018 525.578 1.76985 511.795 2.88631C493.817 4.00278 438.503 8.14228 361.077 15.7686C264.294 25.3014 198.074 21.9521 156.124 21.6945Z" fill="#E1E3EA"/>
+    <path d="M496.232 18.4194C262.905 32.0825 68.7427 26.7226 0.827637 22.3347V81.0579H1206.66V22.4723C1125.87 29.3265 957.626 27.284 883.605 25.4059C793.911 20.4894 590.863 12.2089 496.232 18.4194Z" fill="#E1E3EA"/>
+  </svg>    
+</div>
+    
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    Inputmask("decimal", {
+      radixPoint: '.',
+      allowMinus: false,
+      rightAlign: false,
+      digits: 2,
+      }).mask("#id_price");  
+  </script>
+{% endblock %}
