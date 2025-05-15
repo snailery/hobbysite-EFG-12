@@ -13,6 +13,7 @@ def index(request):
 class ThreadListView(ListView):
     model = models.Thread
     template_name = "thread_list.html" #former threads.html
+    context_object_name = "unused_threads_queryset"
 
     def get_queryset(self):
         # Load all threads with related categories and authors
@@ -45,6 +46,7 @@ class ThreadListView(ListView):
 class ThreadDetailView(DetailView):
     model = models.Thread
     template_name = "thread_view.html" #former thread.html
+    context_object_name = "thread"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
