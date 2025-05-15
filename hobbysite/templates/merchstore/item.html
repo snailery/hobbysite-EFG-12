@@ -67,7 +67,7 @@
 
       <p class="text-gray-800 text-poppins mb-6">{{ product.desc }}</p>
       {% if request.user == product.owner.user %}
-        <a href="#" class="btn btn-xs btn-light-primary fw-bold mt-auto">
+        <a href="{% url 'merchstore:item-update' product.pk %}" class="btn btn-xs btn-light-primary fw-bold mt-auto">
           <i class="ki-duotone ki-pencil fs-4">
             <span class="path1"></span>
             <span class="path2"></span>

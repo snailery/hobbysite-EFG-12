@@ -37,7 +37,12 @@
     </li>
     <li class="breadcrumb-item"><a href="#" class="text-muted">MerchStore</a></li>
     <li class="breadcrumb-item"><a href="{% url 'merchstore:items' %}" class="text-muted">Items</a></li>
-    <li class="breadcrumb-item text-gray-800">Create New Product</li>
+    {% if request.path == "/merchstore/item/add" %}
+      <li class="breadcrumb-item text-gray-800">Create New Product</li>
+    {% else %}
+      <li class="breadcrumb-item"><a href="{% url 'merchstore:item' product.pk %}" class="text-muted">{{ product.name }}</a></li>
+      <li class="breadcrumb-item text-gray-800">Edit Product Details</li>
+    {% endif %}
   </ol>
 
   <!-- Alert-->
@@ -79,7 +84,11 @@
 
     <form method="POST" class="card d-flex flex-col gap-9 p-9 w-100 w-md-500px h-fit overflow-y-auto text-poppins">
       {% csrf_token %}
-      <h2 class="text-arial-rounded">Create New Product</h2>
+      {% if request.path == "/merchstore/item/add" %}
+        <h2 class="text-arial-rounded">Create New Product</h2>
+      {% else %}
+        <h2 class="text-arial-rounded">Edit Product Details</h2>
+      {% endif %}
       <div>
         <label for="name" class="required form-label fw-bold">Product Name</label>
         {{ form.name }}
