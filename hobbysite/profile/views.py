@@ -6,7 +6,7 @@ from .forms import ProfileDisplayNameForm
 
 def passport(request, username):
     user = get_object_or_404(User, username=username)
-    profile = user.profile
+    profile, _ = Profile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
         form = ProfileDisplayNameForm(request.POST, instance=profile)
