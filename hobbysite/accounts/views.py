@@ -16,5 +16,5 @@ def register(request):
             return redirect("/accounts/login")
     else:
         register_form = ExtendedUserCreationForm()
-    ctx = {}
+    ctx = {'register_form': register_form}
     return render(request, 'registration/register.html', ctx)
