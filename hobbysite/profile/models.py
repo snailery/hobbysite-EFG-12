@@ -7,4 +7,4 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=63)
 
     def __str__(self):
-        return f"{self.user.pk}: {self.user.username} ({self.display_name})"
+        return f"{self.display_name}"
