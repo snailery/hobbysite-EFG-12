@@ -3,26 +3,26 @@ from .models import Commission, Job, JobApplication
 from django.forms import inlineformset_factory, modelformset_factory, BaseModelFormSet
 from django.core.exceptions import ValidationError
 
+
 class CommissionForm(forms.ModelForm):
     class Meta:
         model = Commission
-        exclude = []
+        exclude = ["author"]
 
 
 class FullCommissionForm(CommissionForm):
     class Meta:
         model = Commission
-        exclude = ["status"]
+        exclude = ["author", "status"]
 
 
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
         exclude = []
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.fields["Profile"].disabled = True
         self.fields["status"].disabled = True
 
 
@@ -36,7 +36,7 @@ class JobApplicationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.fields["Profile"].disabled = True
+        self.fields["applicant"].disabled = True
         self.fields["job"].disabled = True
 
 
@@ -73,4 +73,4 @@ JobApplicationFormSet = modelformset_factory(
 class ApplyToJobForm(forms.ModelForm):
     class Meta:
         model = JobApplication
-        exclude = ["status", "Profile", "job"]
+        exclude = ["status", "applicant", "job"]

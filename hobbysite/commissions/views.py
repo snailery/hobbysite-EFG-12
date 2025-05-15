@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
+
 
 class CommissionListView(ListView):
     model = Commission
@@ -28,6 +30,7 @@ def commission_detail(request, pk):
         if apply_form.is_valid():
             job_application = apply_form.save(commit=False)
             job_application.job = job
+            job_application.applicant = request.user.profile
             job_application.save()
             return redirect("commissions:commission", pk=commission.pk)
     else:
@@ -39,16 +42,19 @@ def commission_detail(request, pk):
         "total_manpower": total_manpower,
         "apply_form": apply_form
     }
-    return render(request, "commissions/commission.html", ctx)
+    return render(request, "commission.html", ctx)
 
 
+@login_required
 def commission_create(request):
     if (request.method == "POST"):
         commission_form = CommissionForm(request.POST)
         jobs_formset = JobFormSet(request.POST)
 
         if commission_form.is_valid() and jobs_formset.is_valid():
-            commission = commission_form.save()
+            commission = commission_form.save(commit=False)
+            commission.author = request.user.profile
+            commission.save()
             jobs_formset.instance = commission
             jobs_formset.save()
             return redirect('commissions:commission', pk=commission.pk)
@@ -60,9 +66,10 @@ def commission_create(request):
         "commission_form": commission_form,
         "jobs_formset": jobs_formset
     }
-    return render(request, "commissions/commission_create.html", ctx)
+    return render(request, "commission_create.html", ctx)
 
 
+@login_required
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
     # Check Commission Status
@@ -81,7 +88,9 @@ def commission_update(request, pk):
 
         # Form Validation
         if commission_form.is_valid() and jobs_formset.is_valid() and job_application_formset.is_valid():
-            commission = commission_form.save()
+            commission = commission_form.save(commit=False)
+            commission.author = request.user.profile
+            commission.save()
             jobs_formset.save()
             job_application_formset.save()
 
@@ -118,4 +127,4 @@ def commission_update(request, pk):
         "jobs_formset": jobs_formset,
         "job_application_formset": job_application_formset
     }
-    return render(request, "commissions/commission_update.html", ctx)
+    return render(request, "commission_update.html", ctx)
