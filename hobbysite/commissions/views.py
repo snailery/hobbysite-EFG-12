@@ -85,6 +85,10 @@ def commission_create(request):
 @login_required
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
+
+    if request.user.profile != commission.author:
+        return redirect("commissions:commissions")
+
     # Check Commission Status
     is_commission_full = True
     if (commission.jobs.filter(status="OPEN").exists()):
