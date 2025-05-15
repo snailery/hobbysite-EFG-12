@@ -24,7 +24,14 @@
   <section class="d-flex flex-row flex-wrap gap-4 gap-md-8 pb-16 items">
     {% for item in products %}
       <article onclick="window.location.href='{% url "merchstore:item" item.pk %}';" class="card d-flex p-6 gap-5 hover-elevate-up cursor-pointer">
+        {% if item.status == "SAL" %}
+          <div class="ribbon ribbon-start position-absolute left-0 mt-3 w-100">
+            <div class="ribbon-label bg-app-yellow text-brown text-poppins fst-italic fw-bold">On Sale!</div>
+          </div>
+        {% endif %}
+
         <figure class="bg-gray-300 rounded p-10 w-100 ratio ratio-1x1">
+          
         </figure>
 
         <figcaption class="d-flex flex-col align-items-center gap-2">
