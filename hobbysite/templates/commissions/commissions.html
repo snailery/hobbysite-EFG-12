@@ -6,18 +6,18 @@
     {% if user.is_authenticated %}
     <div>
         <h1>Commissions Owned</h1>
-        <ul>
+        <ul class="list-group">
             {% for commission in commissions_owned %}
-            <li><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
+            <li class="list-group-item"><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
             {% endfor %}
         </ul>
     </div>
     <hr>
     <div>
         <h1>Commissions Applied To</h1>
-        <ul>
+        <ul class="list-group">
             {% for commission in commissions_applied %}
-            <li><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
+            <li class="list-group-item"><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -25,11 +25,11 @@
     {% endif %}
     <div>
         <h1>All Commissions</h1>
-        <ul>
-        {% for commission in commission_list %}
-        <li><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
-        {% endfor %}
-    </ul>
+        <ul class="list-group">
+            {% for commission in commission_list %}
+            <li class="list-group-item"><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
     <a href="{% url 'commissions:commission-create' %}">Create New Commission</a>
 {% endblock %}
