@@ -12,3 +12,5 @@ urlpatterns = [
     path('article/add/', create_article, name='article_create'),
     path('article/<int:num>/edit/', update_article, name='article_update'),
 ]
+
+app_name = 'blog'
