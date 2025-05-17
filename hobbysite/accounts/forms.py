@@ -20,14 +20,6 @@ class ProfileRegisterForm(forms.ModelForm):
             raise ValidationError("Passwords don't match")
         return password2
 
-
-class ExtendedUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-
-    class Meta:
-        model = User
-        exclude = []
-
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if User.objects.filter(email=email).exists():
