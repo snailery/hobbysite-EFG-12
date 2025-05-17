@@ -17,10 +17,10 @@ def register(request):
             user.username = username
             user.set_password(password)
             user.email = profile.email
-
-            profile.user = profile
-            profile.save()
             user.save()
+
+            profile.user = user
+            profile.save()
             return redirect("/accounts/login")
     else:
         register_form = ProfileRegisterForm()
