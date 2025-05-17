@@ -44,10 +44,27 @@ class ThreadListView(ListView):
         return context
 
 
-def thread_detail(request, pk):
-    thread = get_object_or_404(models.Thread, pk=pk)
-    related_threads = models.Thread.objects.filter(category=thread.category).exclude(pk=pk)[:2]
-    comments = thread.comments.order_by("created_on")
+class ThreadDetailView(DetailView):
+    model = models.Thread
+    template_name = "thread_view.html" #former thread.html
+    context_object_name = "thread"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        thread = self.get_object()
+
+        context["related_threads"] = models.Thread.objects.filter(
+            category=thread.category
+        ).exclude(pk=thread.pk)[:2]
+
+        context["comments"] = thread.comments.order_by("created_on")
+        context["comment_form"] = kwargs.get("comment_form", forms.CommentForm())
+        context["can_edit"] = self.request.user.is_authenticated and thread.author.user == self.request.user
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
 
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -74,17 +91,10 @@ def thread_detail(request, pk):
     return render(request, "forum/thread_view.html", context)
 
 
-@login_required
-def thread_create(request):
-    if request.method == "POST":
-        thread_form = forms.ThreadForm(request.POST, request.FILES)
-        if form.is_valid():
-            thread = thread_form.save(commit=False)
-            thread.author = request.user.profile
-            thread.save()
-            return redirect("forum:thread_detail", pk=thread.pk)
-    else:
-        thread_form = forms.ThreadForm()
+class ThreadCreateView(LoginRequiredMixin, CreateView):
+    model = models.Thread
+    fields = ["title", "entry", "image", "category"]
+    template_name = "thread_form.html"
 
     return render(request, "forum/thread_form.html", {"form": form})
 
@@ -95,14 +105,9 @@ def thread_update(request, pk):
     if thread.author.user != request.user:
         return redirect("forum:thread_detail", pk=pk)
 
-    if request.method == "POST":
-        form = forms.ThreadForm(request.POST, request.FILES, instance=thread)
-        if form.is_valid():
-            thread = form.save(commit=False)
-            thread.updated_on = timezone.now()
-            thread.save()
-            return redirect("forum:thread_detail", pk=thread.pk)
-    else:
-        form = forms.ThreadForm(instance=thread)
+class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = models.Thread
+    fields = ["title", "entry", "image", "category"]
+    template_name = "thread_form.html"
 
     return render(request, "forum/thread_form.html", {"form": form})
