@@ -13,10 +13,7 @@ def index(request):
 class ThreadListView(ListView):
     model = models.Thread
     template_name = "forum/thread_list.html" #former threads.html
-
-    def get_queryset(self):
-        # Load all threads with related categories and authors
-        return models.Thread.objects.select_related("category", "author").all()
+    queryset = Thread.objects.order_by("category", "author").all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,16 +27,15 @@ class ThreadListView(ListView):
             user_threads = None
             other_threads = all_threads.order_by("-created_on")
 
-        # Group other users' threads by category
-        threads_by_category = {}
+        categorized = {}
         for thread in other_threads:
-            category_name = thread.category.name if thread.category else "Uncategorized"
-            threads_by_category.setdefault(category_name, []).append(thread)
+            label = thread.category.name if thread.category else "Uncategorized"
+            categorized.setdefault(label, []).append(thread)
 
         context["user_threads"] = user_threads
-        context["threads_by_category"] = threads_by_category
+        context["threads_by_category"] = categorized
         context["create_url"] = reverse_lazy("forum:thread_create")
-        
+
         return context
 
 
@@ -75,6 +71,7 @@ def thread_detail(request, pk):
     return render(request, "forum/thread_view.html", context)
 
 
+<<<<<<< HEAD
 @login_required
 def thread_create(request):
     if request.method == "POST":
@@ -86,6 +83,19 @@ def thread_create(request):
             return redirect("forum:thread_detail", pk=thread.pk)
     else:
         thread_form = forms.ThreadForm()
+=======
+class ThreadCreateView(LoginRequiredMixin, CreateView):
+    model = models.Thread
+    fields = ["title", "entry", "image", "category"]
+    template_name = "forum/thread_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user.profile
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+>>>>>>> parent of b12cd51 (Update views.py)
 
     return render(request, "forum/thread_form.html", {"form": form})
 
@@ -96,7 +106,6 @@ class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_success_url(self):
         return self.object.get_absolute_url()
-
 
     def test_func(self):
         thread = self.get_object()
