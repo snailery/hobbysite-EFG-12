@@ -9,10 +9,15 @@ def register(request):
         register_form = ProfileRegisterForm(request.POST)
 
         if register_form.is_valid():
+            username = register_form.cleaned_data["username"]
             password = register_form.cleaned_data["password2"]
             profile = register_form.save(commit=False)
+
             user = User()
+            user.username = username
             user.set_password(password)
+            user.email = profile.email
+
             profile.user = profile
             profile.save()
             user.save()
