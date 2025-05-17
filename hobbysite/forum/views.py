@@ -43,41 +43,38 @@ class ThreadListView(ListView):
         return context
 
 
-class ThreadDetailView(DetailView):
-    model = models.Thread
-    template_name = "forum/thread_view.html" #former thread.html
-    context_object_name = "thread"
+def thread_detail(request, pk):
+    thread = get_object_or_404(models.Thread, pk=pk)
+    related_threads = models.Thread.objects.filter(category=thread.category).exclude(pk=pk)[:2]
+    comments = thread.comments.order_by("created_on")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        thread = self.get_object()
-
-        context["related_threads"] = models.Thread.objects.filter(
-            category=thread.category
-        ).exclude(pk=thread.pk)[:2]
-
-        context["comments"] = thread.comments.order_by("created_on")
-        context["comment_form"] = kwargs.get("comment_form", forms.CommentForm())
-        context["can_edit"] = self.request.user.is_authenticated and thread.author.user == self.request.user
-
-        return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
+    if request.method == "POST":
         if not request.user.is_authenticated:
             return redirect("login")
+
+            if request.method == "POST":
 
         form = forms.CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.thread = self.object
+            comment.thread = thread
             comment.author = request.user.profile
+            comment.created_on = timezone.now()
+            comment.updated_on = timezone.now()
             comment.save()
-            return redirect(self.object.get_absolute_url())
+            return redirect("forum:thread_detail", pk=thread.pk)
+    else:
+        form = forms.CommentForm()
 
-        context = self.get_context_data(comment_form=form)
-        return self.render_to_response(context)
+    context = {
+        "thread": thread,
+        "related_threads": related_threads,
+        "comments": comments,
+        "comment_form": form,
+        "can_edit": request.user.is_authenticated and thread.author.user == request.user
+    }
+
+    return render(request, "forum/thread_view.html", context)
 
 
 class ThreadCreateView(LoginRequiredMixin, CreateView):
