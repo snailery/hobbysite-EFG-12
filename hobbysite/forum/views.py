@@ -54,41 +54,40 @@ def thread_detail(request, pk):
 
             if request.method == "POST":
 
-        form = forms.CommentForm(request.POST)
+        comment_form = forms.CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save(commit=False)
+            comment = comment_form.save(commit=False)
             comment.thread = thread
             comment.author = request.user.profile
-            comment.created_on = timezone.now()
-            comment.updated_on = timezone.now()
             comment.save()
             return redirect("forum:thread_detail", pk=thread.pk)
     else:
-        form = forms.CommentForm()
+        comment_form = forms.CommentForm()
 
     context = {
         "thread": thread,
         "related_threads": related_threads,
         "comments": comments,
-        "comment_form": form,
+        "comment_form": comment_form,
         "can_edit": request.user.is_authenticated and thread.author.user == request.user
     }
 
     return render(request, "forum/thread_view.html", context)
 
 
-class ThreadCreateView(LoginRequiredMixin, CreateView):
-    model = models.Thread
-    fields = ["title", "entry", "image", "category"]
-    template_name = "thread_form.html"
+@login_required
+def thread_create(request):
+    if request.method == "POST":
+        thread_form = forms.ThreadForm(request.POST, request.FILES)
+        if form.is_valid():
+            thread = thread_form.save(commit=False)
+            thread.author = request.user.profile
+            thread.save()
+            return redirect("forum:thread_detail", pk=thread.pk)
+    else:
+        thread_form = forms.ThreadForm()
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
+    return render(request, "forum/thread_form.html", {"form": form})
 
 class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = models.Thread
