@@ -53,7 +53,7 @@
           <span class="fw-bold fs-4 text-gray-500">{{ product.prod_type }}</span>
         </div>
         {% if product.status == "SAL" %}
-          <span class="badge badge-light-success badge-lg align-self-start">{{ product.get_status_display }}</span>
+          <span class="badge badge-light-warning badge-lg align-self-start">{{ product.get_status_display }}</span>
         {% elif product.status == "OUT" %}
           <span class="badge badge-light-danger badge-lg align-self-start">{{ product.get_status_display }}</span>
         {% else %}

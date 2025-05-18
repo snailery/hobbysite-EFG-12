@@ -8,12 +8,14 @@ from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
 
+
 def index(request):
     return HttpResponse("Forum home")
 
+
 class ThreadListView(ListView):
     model = models.Thread
-    template_name = "forum/thread_list.html" #former threads.html
+    template_name = "forum/thread_list.html"  # former threads.html
 
     def get_queryset(self):
         # Load all threads with related categories and authors
@@ -25,8 +27,10 @@ class ThreadListView(ListView):
 
         if self.request.user.is_authenticated:
             profile = get_object_or_404(models.Profile, user=self.request.user)
-            user_threads = all_threads.filter(author=profile).order_by("-created_on")
-            other_threads = all_threads.exclude(author=profile).order_by("-created_on")
+            user_threads = all_threads.filter(
+                author=profile).order_by("-created_on")
+            other_threads = all_threads.exclude(
+                author=profile).order_by("-created_on")
         else:
             user_threads = None
             other_threads = all_threads.order_by("-created_on")
@@ -44,71 +48,73 @@ class ThreadListView(ListView):
         return context
 
 
-class ThreadDetailView(DetailView):
-    model = models.Thread
-    template_name = "thread_view.html" #former thread.html
-    context_object_name = "thread"
+# class ThreadDetailView(DetailView):
+#     model = models.Thread
+#     template_name = "thread_view.html"  # former thread.html
+#     context_object_name = "thread"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        thread = self.get_object()
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         thread = self.get_object()
 
-        context["related_threads"] = models.Thread.objects.filter(
-            category=thread.category
-        ).exclude(pk=thread.pk)[:2]
+#         context["related_threads"] = models.Thread.objects.filter(
+#             category=thread.category
+#         ).exclude(pk=thread.pk)[:2]
 
-        context["comments"] = thread.comments.order_by("created_on")
-        context["comment_form"] = kwargs.get("comment_form", forms.CommentForm())
-        context["can_edit"] = self.request.user.is_authenticated and thread.author.user == self.request.user
+#         context["comments"] = thread.comments.order_by("created_on")
+#         context["comment_form"] = kwargs.get(
+#             "comment_form", forms.CommentForm())
+#         context["can_edit"] = self.request.user.is_authenticated and thread.author.user == self.request.user
 
-        return context
+#         return context
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
+#     def post(self, request, *args, **kwargs):
+#         self.object = self.get_object()
 
-    if request.method == "POST":
-        if not request.user.is_authenticated:
-            return redirect("login")
+#     if request.method == "POST":
+#         if not request.user.is_authenticated:
+#             return redirect("login")
 
-        comment_form = forms.CommentForm(request.POST)
-        if form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.thread = thread
-            comment.author = request.user.profile
-            comment.save()
-            return redirect("forum:thread_detail", pk=thread.pk)
-    else:
-        comment_form = forms.CommentForm()
+#         comment_form = forms.CommentForm(request.POST)
+#         if form.is_valid():
+#             comment = comment_form.save(commit=False)
+#             comment.thread = thread
+#             comment.author = request.user.profile
+#             comment.save()
+#             return redirect("forum:thread_detail", pk=thread.pk)
+#     else:
+#         comment_form = forms.CommentForm()
 
-    context = {
-        "thread": thread,
-        "related_threads": related_threads,
-        "comments": comments,
-        "comment_form": comment_form,
-        "can_edit": request.user.is_authenticated and thread.author.user == request.user
-    }
+#     context = {
+#         "thread": thread,
+#         "related_threads": related_threads,
+#         "comments": comments,
+#         "comment_form": comment_form,
+#         "can_edit": request.user.is_authenticated and thread.author.user == request.user
+#     }
 
-    return render(request, "forum/thread_view.html", context)
+#     return render(request, "forum/thread_view.html", context)
 
 
-class ThreadCreateView(LoginRequiredMixin, CreateView):
-    model = models.Thread
-    fields = ["title", "entry", "image", "category"]
-    template_name = "thread_form.html"
+# class ThreadCreateView(LoginRequiredMixin, CreateView):
+#     model = models.Thread
+#     fields = ["title", "entry", "image", "category"]
+#     template_name = "thread_form.html"
 
-    return render(request, "forum/thread_form.html", {"form": form})
+#     return render(request, "forum/thread_form.html", {"form": form})
 
-  
-@login_required
-def thread_update(request, pk):
-    thread = get_object_or_404(models.Thread, pk=pk)
 
-    if thread.author.user != request.user:
-        return redirect("forum:thread_detail", pk=pk)
+# @login_required
+# def thread_update(request, pk):
+#     thread = get_object_or_404(models.Thread, pk=pk)
 
-class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = models.Thread
-    fields = ["title", "entry", "image", "category"]
-    template_name = "thread_form.html"
-    
-    return render(request, "forum/thread_form.html", {"form": form})
+#     if thread.author.user != request.user:
+#         return redirect("forum:thread_detail", pk=pk)
+
+
+# class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = models.Thread
+#     fields = ["title", "entry", "image", "category"]
+#     template_name = "thread_form.html"
+
+#     return render(request, "forum/thread_form.html", {"form": form})

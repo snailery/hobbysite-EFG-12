@@ -55,13 +55,13 @@ class ItemDetailView(FormMixin, DetailView):
             if not request.user.is_authenticated:
                 request.session["amount"] = request.POST.get("amount")
             
-            return test_post(request, self.get_object().pk)
+            return transaction_post(request, self.get_object().pk)
         else:
             print(form.errors.as_data())
         
 
 @login_required
-def test_post(request, p_pk):
+def transaction_post(request, p_pk):
     if request.session.get("amount"):
         del request.session["amount"]
     
@@ -72,7 +72,6 @@ def test_post(request, p_pk):
     p.stock -= t.amount
     
     if p.stock < 1:
-        # p.status = Product.PRODUCT_STATUS["OUT"]
         p.status = "OUT"
 
     p.save()
@@ -94,7 +93,8 @@ def item_list(request):
 
     ctx = {
         "all_products": all_products,
-        "your_products": your_products
+        "your_products": your_products,
+        "total": Product.objects.count,
     }
 
     return render(request, 'merchstore/items.html', ctx)
@@ -117,6 +117,7 @@ def item_create(request):
             p.stock = request.POST.get("stock")
             p.prod_type = ProductType.objects.get(
                 pk=request.POST.get("prod_type"))
+            p.status = request.POST.get("status")
             if request.FILES:
                 p.image = request.FILES["image"]
             p.save()
