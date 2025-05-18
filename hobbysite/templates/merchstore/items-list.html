@@ -1,3 +1,5 @@
+{% load static %}
+
 <header class="d-flex justify-content-between pt-4 pb-8">
   <!-- RIGHT -->
   <div>
@@ -7,7 +9,7 @@
 
   <!-- LEFT -->
   <div>
-    {% if request.user.is_authenticated  %}
+    {% if request.user.is_authenticated %}
       <a href="{% url "merchstore:item-create" %}" class="btn btn-primary fw-bold">
         <i class="ki-duotone ki-plus-square fs-2">
           <span class="path1"></span>
@@ -20,6 +22,14 @@
   </div>
 </header>
 
+{% if total == 0 %}
+  <div class="m-auto w-200px text-gray-600 text-center">
+    <img src="{% static '/media/no-products.png' %}" class="img-fluid opacity-75 mb-7">
+    <h1 class="text-gray-600">No Products Yet.</h1>
+    <span>Add your product and it will show up here.</span>
+  </div>
+{% endif %}
+
 <div class="d-flex justify-content-center">
   <section class="d-flex flex-row flex-wrap gap-4 gap-md-8 pb-16 items">
     {% for item in products %}
@@ -30,9 +40,9 @@
           </div>
         {% endif %}
 
-        <figure class="bg-gray-300 rounded p-10 w-100 ratio ratio-1x1 overflow-hidden">
+        <figure class="bg-thumbnail rounded p-8 w-100 ratio-square overflow-hidden">
           {% if item.image %}
-            <img src="{{ item.image.url }}">
+            <img class="img-fluid" src="{{ item.image.url }}">
           {% endif %}
         </figure>
 
@@ -83,7 +93,7 @@
               Sold Out
             </a>
           {% else %}
-            <a href="#" class="btn btn-xs btn-green fw-bold mt-auto" >
+            <a href="{% url 'merchstore:item' item.pk %}" class="btn btn-xs btn-green fw-bold mt-auto" >
               <svg class="mt-n1 mx-1" width="17" height="15" viewBox="0 0 17 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <g id="Icon">
                 <path id="Body" fill-rule="evenodd" clip-rule="evenodd" d="M3.16708 2.07451H1.63906C1.28004 2.07451 0.989005 1.78347 0.989005 1.42446V0.931944C0.989005 0.572929 1.28004 0.28189 1.63906 0.28189H3.87899C3.91684 0.279391 3.95453 0.279426 3.99185 0.28189H4.04428C4.27792 0.28189 4.48276 0.405136 4.59734 0.590165C4.66229 0.66812 4.71452 0.758989 4.74975 0.860699L5.52568 3.10121H16.1833V5.8839C16.1833 7.5593 14.8252 8.91748 13.1498 8.91748H8.20346C7.96823 8.91748 7.73847 8.89406 7.51639 8.84941L7.74431 9.50753L15.2969 9.50745C15.6559 9.50745 15.947 9.79849 15.947 10.1575V10.5705C15.947 10.9296 15.6559 11.2206 15.2969 11.2206H14.9416C15.1658 11.5355 15.2972 11.9178 15.2972 12.3299C15.2972 13.4069 14.3998 14.28 13.2928 14.28C12.1859 14.28 11.2885 13.4069 11.2885 12.3299C11.2885 11.9178 11.4199 11.5355 11.6441 11.2206H10.1745C10.3987 11.5355 10.5301 11.9178 10.5301 12.3299C10.5301 13.4069 9.63274 14.28 8.52578 14.28C7.41882 14.28 6.52145 13.4069 6.52145 12.3299C6.52145 11.9259 6.64772 11.5506 6.86395 11.2393C6.54268 11.2046 6.25462 10.9898 6.14162 10.6635L3.16708 2.07451ZM14.3814 4.30215C14.3814 4.0558 14.1817 3.8561 13.9354 3.8561C13.689 3.8561 13.4893 4.0558 13.4893 4.30215V7.3145C13.4893 7.56084 13.689 7.76055 13.9354 7.76055C14.1817 7.76055 14.3814 7.56084 14.3814 7.3145V4.30215ZM11.884 3.8561C12.1304 3.8561 12.3301 4.0558 12.3301 4.30215V7.3145C12.3301 7.56084 12.1304 7.76055 11.884 7.76055C11.6377 7.76055 11.438 7.56084 11.438 7.3145V4.30215C11.438 4.0558 11.6377 3.8561 11.884 3.8561ZM10.2787 4.30215C10.2787 4.0558 10.079 3.8561 9.83266 3.8561C9.58632 3.8561 9.38661 4.0558 9.38661 4.30215V7.3145C9.38661 7.56084 9.58632 7.76055 9.83266 7.76055C10.079 7.76055 10.2787 7.56084 10.2787 7.3145V4.30215ZM7.7813 3.8561C8.02765 3.8561 8.22735 4.0558 8.22735 4.30215V7.3145C8.22735 7.56084 8.02765 7.76055 7.7813 7.76055C7.53495 7.76055 7.33525 7.56084 7.33525 7.3145V4.30215C7.33525 4.0558 7.53495 3.8561 7.7813 3.8561Z" fill="white"/>
