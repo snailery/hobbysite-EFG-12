@@ -6,6 +6,8 @@ from .views import (
     update_article,
 )
 
+app_name = 'blog'
+
 urlpatterns = [
     path('articles/', view_article_list, name='article_list'),
     path('article/<int:num>/', view_article_detail, name='article_detail'),
