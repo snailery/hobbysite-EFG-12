@@ -7,7 +7,7 @@
   {% if articles_by_user %}
     <ul>
       {% for article in articles_by_user %}
-        <li><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a> — {{ article.category.name }}</li>
+        <li><a href="{% url 'blog:article_detail' article.pk %}">{{ article.title }}</a> — {{ article.category.name }}</li>
       {% endfor %}
     </ul>
   {% else %}
@@ -21,8 +21,12 @@
     <section>
       <h3>{{ category.name }}</h3>
       <ul>
-        {% for article in category.articles.exclude(author=request.user.profile) %}
-          <li><a href="{% url 'article_detail' article.pk %}">{{ article.title }}</a></li>
+        {% for article in category.articles.all %}
+          {% if user.is_authenticated and user.profile != article.author %}
+            <li><a href="{% url 'blog:article_detail' article.pk %}">{{ article.title }}</a></li>
+          {% elif not user.is_authenticated %}
+            <li><a href="{% url 'blog:article_detail' article.pk %}">{{ article.title }}</a></li>
+          {% endif %}
         {% empty %}
           <li>No articles in this category.</li>
         {% endfor %}
