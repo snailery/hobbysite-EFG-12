@@ -13,6 +13,19 @@ class CommissionListView(ListView):
     model = Commission
     template_name = 'commissions/commissions.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            profile = self.request.user.profile
+            # All commissions owned by a user
+            context["commissions_owned"] = Commission.objects.filter(author=profile)
+            # All commissions applied to by a user
+            commissions_applied = set()
+            for job_application in profile.job_applications.all():
+                commissions_applied.add(job_application.job.commission)
+            context["commissions_applied"] = commissions_applied
+        return context
+
 
 def commission_detail(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
@@ -42,7 +55,7 @@ def commission_detail(request, pk):
         "total_manpower": total_manpower,
         "apply_form": apply_form
     }
-    return render(request, "commission.html", ctx)
+    return render(request, "commissions/commission.html", ctx)
 
 
 @login_required
@@ -66,12 +79,16 @@ def commission_create(request):
         "commission_form": commission_form,
         "jobs_formset": jobs_formset
     }
-    return render(request, "commission_create.html", ctx)
+    return render(request, "commissions/commission_create.html", ctx)
 
 
 @login_required
 def commission_update(request, pk):
     commission = get_object_or_404(Commission, pk=pk)
+
+    if request.user.profile != commission.author:
+        return redirect("commissions:commissions")
+
     # Check Commission Status
     is_commission_full = True
     if (commission.jobs.filter(status="OPEN").exists()):
@@ -127,4 +144,4 @@ def commission_update(request, pk):
         "jobs_formset": jobs_formset,
         "job_application_formset": job_application_formset
     }
-    return render(request, "commission_update.html", ctx)
+    return render(request, "commissions/commission_update.html", ctx)

@@ -164,6 +164,11 @@ aside a.active {
   box-shadow: 0px 0px 0px 3px #FFF, 0px 0px 0px 5px currentColor;
 }
 
+aside a img {
+  background-color: currentColor;
+  border-radius: 16.2px;
+}
+
 button {
   -webkit-appearance: none;
   border-radius: 0;

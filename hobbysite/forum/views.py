@@ -40,7 +40,7 @@ class ThreadListView(ListView):
         context["user_threads"] = user_threads
         context["threads_by_category"] = threads_by_category
         context["create_url"] = reverse_lazy("forum:thread_create")
-        
+
         return context
 
 
@@ -98,6 +98,7 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
 
     return render(request, "forum/thread_form.html", {"form": form})
 
+  
 @login_required
 def thread_update(request, pk):
     thread = get_object_or_404(models.Thread, pk=pk)
@@ -109,5 +110,5 @@ class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = models.Thread
     fields = ["title", "entry", "image", "category"]
     template_name = "thread_form.html"
-
+    
     return render(request, "forum/thread_form.html", {"form": form})

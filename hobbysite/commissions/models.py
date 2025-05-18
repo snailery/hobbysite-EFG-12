@@ -74,7 +74,7 @@ class JobApplication(models.Model):
     applicant = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
-        related_name='applicants'
+        related_name='job_applications'
     )
 
     class StatusChoices(models.TextChoices):

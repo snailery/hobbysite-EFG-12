@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ thread.title }} {% endblock %}
+
+{% block content %}
+<div class="thread-container">
+
+    {% if thread.image %}
+        <div class="thread-image">
+            <img src="{{ thread.image.url }}" alt="Image for {{ thread.title }}" style="max-width: 100%; height: auto;">
+        </div>
+    {% endif %}
+
+    <h1>{{ thread.title }}</h1>
+
+    {% if user.is_authenticated and user == thread.author.user %}
+        <p><a href="{% url 'forum:thread_update' thread.pk %}">Edit this thread</a></p>
+    {% endif %}
+
+    <div class="thread-content">
+        <p>{{ thread.entry|linebreaks }}</p>
+    </div>
+
+    <div class="thread-meta mt-3">
+        <small>Posted on {{ thread.created_on|date:"F j, Y" }}</small><br>
+        <small>Last modified: {{ thread.updated_on|date:"F j, Y" }}</small>
+    </div>
+
+    <hr>
+
+    <h3>Explore more in "{{ thread.category.name }}"</h3>
+    {% if related_threads %}
+        <ul>
+            {% for item in related_threads %}
+                <li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no other threads in this category yet.</p>
+    {% endif %}
+
+    <hr>
+
+    {% if user.is_authenticated %}
+        <h3>Post a Comment</h3>
+        <form method="post">
+            {% csrf_token %}
+
+            {% if comment_form.errors %}
+                <div class="error-messages">
+                    <ul>
+                        {% for field in comment_form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                {{ comment_form.entry.label_tag }}<br>
+                {{ comment_form.entry }}
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+    {% endif %}
+
+    <hr>
+
+    <h3>All Comments</h3>
+    {% if comments %}
+        {% for comment in comments %}
+            <div class="comment-box mb-3">
+                <p><strong>{{ comment.author.display_name }}</strong> said:</p>
+                <p>{{ comment.entry|linebreaks }}</p>
+                <small class="text-muted">Posted on {{ comment.created_on|date:"F j, Y, g:i a" }}</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No comments have been added yet.</p>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{% url 'forum:thread_list' %}">← Back to Thread List</a>
+    </div>
+
+</div>
+{% endblock %}

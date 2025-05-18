@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="ProductType",
+            name="ArticleCategory",
             fields=[
                 (
                     "id",
@@ -26,14 +26,14 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(max_length=255)),
-                ("desc", models.TextField()),
+                ("description", models.TextField()),
             ],
             options={
                 "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name="Product",
+            name="Article",
             fields=[
                 (
                     "id",
@@ -44,84 +44,73 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("name", models.CharField(max_length=255)),
-                ("desc", models.TextField()),
-                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
-                ("stock", models.IntegerField()),
+                ("title", models.CharField(max_length=255)),
+                ("entry", models.TextField()),
                 (
-                    "status",
-                    models.CharField(
-                        choices=[
-                            ("AVL", "Available"),
-                            ("SAL", "On Sale"),
-                            ("OUT", "Out of Stock"),
-                        ],
-                        default="AVL",
-                        max_length=3,
+                    "header_image",
+                    models.ImageField(blank=True, null=True, upload_to="images/"),
+                ),
+                ("created_on", models.DateTimeField(auto_now_add=True)),
+                ("updated_on", models.DateTimeField(auto_now=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="profile.profile",
                     ),
                 ),
                 (
-                    "owner",
+                    "category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="articles",
+                        to="blog.articlecategory",
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ["-created_on"],
+            },
+        ),
+        migrations.CreateModel(
+            name="Comment",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("entry", models.TextField()),
+                ("created_on", models.DateTimeField(auto_now_add=True)),
+                ("updated_on", models.DateTimeField(auto_now=True)),
+                (
+                    "article",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="profile.profile",
+                        related_name="comments",
+                        to="blog.article",
                     ),
                 ),
                 (
-                    "prod_type",
+                    "author",
                     models.ForeignKey(
+                        blank=True,
                         null=True,
                         on_delete=django.db.models.deletion.SET_NULL,
-                        to="merchstore.producttype",
+                        to="profile.profile",
                     ),
                 ),
             ],
             options={
-                "ordering": ["name"],
+                "ordering": ["created_on"],
             },
-        ),
-        migrations.CreateModel(
-            name="Transaction",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("amount", models.IntegerField()),
-                (
-                    "status",
-                    models.CharField(
-                        choices=[
-                            ("CRT", "On Cart"),
-                            ("PAY", "To Pay"),
-                            ("SHP", "To Ship"),
-                            ("RCV", "To Receive"),
-                        ],
-                        max_length=3,
-                        null=True,
-                    ),
-                ),
-                (
-                    "buyer",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        to="profile.profile",
-                    ),
-                ),
-                (
-                    "product",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        to="merchstore.product",
-                    ),
-                ),
-            ],
         ),
     ]

@@ -3,9 +3,33 @@
 
 {% block title %}Commissions{% endblock %}
 {% block content %}
-    <ul>
-        {% for commission in commission_list %}
-        <li><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
-        {% endfor %}
-    </ul>
+    {% if user.is_authenticated %}
+    <div>
+        <h1>Commissions Owned</h1>
+        <ul class="list-group">
+            {% for commission in commissions_owned %}
+            <li class="list-group-item"><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <hr>
+    <div>
+        <h1>Commissions Applied To</h1>
+        <ul class="list-group">
+            {% for commission in commissions_applied %}
+            <li class="list-group-item"><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <hr>
+    {% endif %}
+    <div>
+        <h1>All Commissions</h1>
+        <ul class="list-group">
+            {% for commission in commission_list %}
+            <li class="list-group-item"><a href="{% url 'commissions:commission' commission.pk %}">{{ commission.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <a href="{% url 'commissions:commission-create' %}">Create New Commission</a>
 {% endblock %}

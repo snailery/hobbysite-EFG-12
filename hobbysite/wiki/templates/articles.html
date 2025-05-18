@@ -1,8 +1,9 @@
-{% extends 'base_wiki.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Articles{% endblock %}
 {% block content %}
+<h1>Wiki</h1>
 <uL>
     {% for article in article_list %}
     <li><a href="{% url 'wiki:article_detail' article.pk %}">{{ article.title }}</a></li>
