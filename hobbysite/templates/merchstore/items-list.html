@@ -30,13 +30,15 @@
           </div>
         {% endif %}
 
-        <figure class="bg-gray-300 rounded p-10 w-100 ratio ratio-1x1">
-          
+        <figure class="bg-gray-300 rounded p-10 w-100 ratio ratio-1x1 overflow-hidden">
+          {% if item.image %}
+            <img src="{{ item.image.url }}">
+          {% endif %}
         </figure>
 
         <figcaption class="d-flex flex-col align-items-center gap-2">
           <img src="" class="pfp bg-gray-300 rounded-circle ratio ratio-1x1" alt="{{ item.owner.user.username|slice:"0:1" }}" />
-          <a href="{% url 'user_management:username' item.owner.user.username %}" class="text-gray-600 fw-bold text-decoration-underline username">{{ item.owner.user.username }}</a>
+          <a href="{% url 'profile:profile' item.owner.user.username %}" class="text-gray-600 fw-bold text-decoration-underline username">{{ item.owner.user.username }}</a>
         </figcaption>
 
         <figcaption class="text-wrap">

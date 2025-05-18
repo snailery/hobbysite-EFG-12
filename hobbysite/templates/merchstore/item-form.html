@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}Item {{ product.name }}{% endblock %}
+
 {% block content %}
 <!-- Top Decoration -->
 <div class="position-absolute top-0 start-0 w-100 z-index-1" id="wave-top">
@@ -78,17 +79,20 @@
   {% endif %}
 
   <article class="d-flex flex-column flex-lg-row justify-content-between align-items-center align-items-lg-center h-100 w-lg-900px w-100 m-auto">
-    <figure class="h-50 h-lg-100 w-400px bg-gray-400 opacity-0">
-
+    <figure class="h-50 h-lg-100 w-400px" id="image-preview">
+      {% if object.image %}
+        <img src="{{ object.image.url }}" class="img-fluid">
+      {% endif %}
     </figure>
 
-    <form method="POST" class="card d-flex flex-col gap-9 p-9 w-100 w-md-500px h-fit overflow-y-auto text-poppins">
+    <form method="POST" enctype="multipart/form-data" id="item-form" class="card d-flex flex-col gap-9 p-9 w-100 w-md-500px h-fit overflow-y-auto text-poppins">
       {% csrf_token %}
       {% if request.path == "/merchstore/item/add" %}
         <h2 class="text-arial-rounded">Create New Product</h2>
       {% else %}
         <h2 class="text-arial-rounded">Edit Product Details</h2>
       {% endif %}
+
       <div>
         <label for="name" class="required form-label fw-bold">Product Name</label>
         {{ form.name }}
@@ -121,6 +125,19 @@
         {{ form.desc }}
       </div>
       
+      <div>
+        <label for="image" class="form-label fw-bold">Image</label>
+        <div id="dropzone" class="cursor-pointer">
+          <div class="dz-message d-flex flex-column w-100 bg-gray-100 border-gray-300 border-dashed rounded text-gray-500 justify-content-center align-items-center py-6 gap-3">
+            <i class="ki-duotone ki-file-up fs-3x">
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+            <span class="fw-semibold">Drag image here or click to upload.</span>
+          </div>
+        </div>
+        {{ form.image }}
+      </div>
       
       <div class="d-flex flex-row gap-9">
         <div>
@@ -153,7 +170,7 @@
         </div>
       </div>
       
-      <button type="submit" class="btn btn-primary fw-bold mt-auto">Submit</button>
+      <input type="button" onclick="formSubmit()" class="btn btn-primary fw-bold mt-auto" value="Submit" />
     </form>
   </article>
 </main>
@@ -178,5 +195,30 @@
       rightAlign: false,
       digits: 2,
       }).mask("#id_price");  
+      
+      let myDropzone = new Dropzone("#dropzone", { 
+        url: "/merchstore/item/add",
+        autoProcessQueue: false,
+        // previewTemplate: document.getElementById("image-preview").innerHTML,
+        // addedfile: function(file) {
+        //  file.previewElement = Dropzone.createElement(this.options.previewTemplate);
+        // },
+        // thumbnail: function(file, dataUrl) {
+          // Display the image in your file.previewElement
+        // },
+        // uploadprogress: function(file, progress, bytesSent) {
+          // Display the progress
+        //}
+      }); 
+
+      function formSubmit() {
+        if (myDropzone.files.length > 0) {
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(myDropzone.files[0]);
+          document.getElementById("id_image").files = dataTransfer.files;
+        }
+        document.getElementById("item-form").submit();
+      }
+
   </script>
 {% endblock %}
