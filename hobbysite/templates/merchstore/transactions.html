@@ -90,7 +90,7 @@
                 </div>
               </td>
               {% if header == "Products Sold" %}
-                <td>{{ item.buyer.user }} ({{ item.buyer }})</td>
+                <td>Sold to: @{{ item.buyer.user }} ({{ item.buyer }})</td>
               {% else %}
                 <td>{{ item.product.owner.user }} ({{ item.product.owner }})</td>
               {% endif %}

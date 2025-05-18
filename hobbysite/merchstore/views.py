@@ -46,7 +46,6 @@ class ItemDetailView(FormMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['form'] = TransactionForm(
             initial={"amount": self.request.session.get("amount")})
-        print(self.request.session.get("amount"))
         return ctx
 
     def post(self, request, *args, **kwargs):
@@ -73,11 +72,10 @@ def test_post(request, p_pk):
     p.stock -= t.amount
     
     if p.stock < 1:
-        p.status = Product.PRODUCT_STATUS["OUT"]
+        # p.status = Product.PRODUCT_STATUS["OUT"]
+        p.status = "OUT"
 
-    print(p)
     p.save()
-
     t.product = p
     t.save()
 
