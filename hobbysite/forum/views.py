@@ -8,8 +8,6 @@ from django.contrib.auth.decorators import login_required
 from . import models
 from . import forms
 
-def index(request):
-    return HttpResponse("Forum home")
 
 class ThreadListView(ListView):
     model = models.Thread
@@ -98,13 +96,6 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
 
     return render(request, "forum/thread_form.html", {"form": form})
 
-  
-@login_required
-def thread_update(request, pk):
-    thread = get_object_or_404(models.Thread, pk=pk)
-
-    if thread.author.user != request.user:
-        return redirect("forum:thread_detail", pk=pk)
 
 class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = models.Thread
