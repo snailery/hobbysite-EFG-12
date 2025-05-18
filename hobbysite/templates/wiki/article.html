@@ -4,7 +4,7 @@
 {% block title %}Article{% endblock %}
 {% block content %}
     {% if request.user.is_authenticated and user.profile == article.author %}
-            <a href="{% url 'wiki:edit_article' pk=object.pk %}">Edit Article</a>
+            <a href="{% url 'wiki:update_article' pk=object.pk %}">Edit Article</a>
     {% endif %}
     <img src="{{ article.header_image.url }}">
     <h3><b>{{ article.title }}</b></h3>
