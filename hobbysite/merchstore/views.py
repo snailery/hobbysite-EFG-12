@@ -38,37 +38,51 @@ class ItemDetailView(FormMixin, DetailView):
     model = Product
     template_name = 'merchstore/item.html'
     form_class = TransactionForm
-
+    
     def get_success_url(self):
         return reverse("merchstore:items")
     
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['form'] = TransactionForm()
+        ctx['form'] = TransactionForm(
+            initial={"amount": self.request.session.get("amount")})
+        print(self.request.session.get("amount"))
         return ctx
 
     def post(self, request, *args, **kwargs):
         form = TransactionForm(request.POST)
 
         if form.is_valid():
-            t = Transaction()
-            p = Product.objects.get(pk=self.get_object().pk)
-            t.buyer = request.user.profile
-            t.amount = int(request.POST.get("amount"))
-            p.stock -= t.amount
-            p.save()
-
-            t.product = p
-            t.save()
-
-            return redirect(reverse("merchstore:items"))
+            if not request.user.is_authenticated:
+                request.session["amount"] = request.POST.get("amount")
+            
+            return test_post(request, self.get_object().pk)
         else:
             print(form.errors.as_data())
-            self.object_list = self.get_queryset(**kwargs)
-            ctx = self.get_context_data(**kwargs)
-            ctx['form'] = form
+        
 
-            return self.render_to_response(ctx)
+@login_required
+def test_post(request, p_pk):
+    if request.session.get("amount"):
+        del request.session["amount"]
+    
+    t = Transaction()
+    p = Product.objects.get(pk=p_pk)
+    t.buyer = request.user.profile
+    t.amount = int(request.POST.get("amount"))
+    p.stock -= t.amount
+    
+    if p.stock < 1:
+        p.status = Product.PRODUCT_STATUS["OUT"]
+
+    print(p)
+    p.save()
+
+    t.product = p
+    t.save()
+
+    return redirect(reverse("merchstore:cart"))
+    
 
 
 def item_list(request):
@@ -131,12 +145,12 @@ class ItemUpdateView(UpdateView):
     form_class = ProductForm
 
     def form_valid(self, form):
-        instance = form.save(commit=False)
+        p = form.save(commit=False)
 
-        if instance.stock == 0:
-            instance.status = "OUT"
-        elif instance.stock > 0 and instance.status == "OUT":
-            instance.status = "AVL"
+        if p.stock == 0:
+            p.status = "OUT"
+        elif p.stock > 0 and p.status == "OUT":
+            p.status = "AVL"
 
         super(ItemUpdateView, self).form_valid(form)
         return redirect(self.get_success_url())

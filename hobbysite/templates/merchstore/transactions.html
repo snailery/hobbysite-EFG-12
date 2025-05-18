@@ -5,6 +5,11 @@
 
 {% block styles %}
   <link href="{% static 'plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css"/>
+  <style>
+    .bg-gray-200 {
+      background-color: var(--bs-gray-200) !important;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -56,9 +61,12 @@
             <th>Product</th>
             {% if header == "Products Sold" %}
               <th>Buyer</th>
+            {% else%}
+              <th>Owner</th>
             {% endif %}
             <th class="text-end pe-0">Price</th>
             <th class="text-end pe-0">Amt (Qty)</th>
+            <th class="text-end pe-0">Total Price</th>
             <th class="text-end pe-0">Date Added</th>
             <th class="text-end">Status</th>
           </tr>
@@ -75,19 +83,21 @@
                   {% endif %}
                 </figure>
                 <div class="d-flex flex-column gap-1">
-                  <a href="{% url "merchstore:item" item.product.pk %}" class="text-body">{{ item.product.name }}</a>
+                  <a href="{% url 'merchstore:item' item.product.pk %}" class="text-body">{{ item.product.name }}</a>
                   {% if header == "Your Cart" %}
-                    <a href="#" class="fw-normal text-gray-600">@ {{ item.product.owner.user }} ({{ item.product.owner }}) </a>
+                    <a href="#" class="fw-normal text-gray-600 fst-italic">@ {{ item.product.owner.user }} ({{ item.product.owner }}) </a>
                   {% endif %}
                 </div>
               </td>
               {% if header == "Products Sold" %}
-                <td class=""> 
-                  @ {{ item.buyer.user }} ({{ item.buyer }})  
-                </td>
+                <td>{{ item.buyer.user }} ({{ item.buyer }})</td>
+              {% else %}
+                <td>{{ item.product.owner.user }} ({{ item.product.owner }})</td>
               {% endif %}
               <td class="text-end">{{ item.product.price }}</td>
               <td class="text-end">{{ item.amount }}</td>
+              {% widthratio item.product.price 1 item.amount as total %}
+              <td class="text-end">{{ total|floatformat:2 }}</td>
               <td class="text-end">{{ item.created_on }}</td>
               <td class="text-end">
                 {% if item.status == "RCV" %}
@@ -112,9 +122,43 @@
 {% block scripts %}
   <script src="{% static 'plugins/custom/datatables/datatables.bundle.js' %}"></script>
   <script>
-    let table = new DataTable("#transaction-table");
+    var groupColumn = 1;
+    let table = $("#transaction-table").DataTable({
+      columnDefs: [{ visible: false, targets: groupColumn }],
+      order: [[groupColumn, 'asc']],
+      drawCallback: function (settings) {
+        var api = this.api();
+        var rows = api.rows({ page: 'current' }).nodes();
+        var last = null;
+ 
+        api.column(groupColumn, { page: 'current' })
+          .data()
+          .each(function (group, i) {
+            if (last !== group) {
+              $(rows)
+                .eq(i)
+                .before(
+                  '<tr class="group"><td class="ps-4 cursor-pointer bg-gray-200 text-gray-600 rounded" colspan="6">' + group + '</td></tr>'
+                );
+              last = group;
+              }
+          });
+        }
+    });
+    
+    $("#transaction-table tbody").on("click", "tr.group", function () {
+      var currentOrder = table.order()[0];
+      if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+          table.order([[groupColumn, 'desc']]).draw();
+      }
+      else {
+          table.order([[groupColumn, 'asc']]).draw();
+      }
+  });
+
     $("#search").on('keyup', function () {
       table.search(this.value).draw();
     });
+
   </script>
 {% endblock %}

@@ -53,9 +53,9 @@
           <span class="fw-bold fs-4 text-gray-500">{{ product.prod_type }}</span>
         </div>
 
-        {% if product.status == "SAL" %}
+        {% if product.status == "On Sale" %}
           <span class="badge badge-light-success badge-lg align-self-start">{{ product.get_status_display }}</span>
-        {% elif product.status == "OUT" %}
+        {% elif product.status == "Out of Stock" %}
           <span class="badge badge-light-danger badge-lg align-self-start">{{ product.get_status_display }}</span>
         {% else %}
           <span class="badge badge-light-primary badge-lg align-self-start">{{ product.get_status_display }}</span>
@@ -76,7 +76,7 @@
           </i>
           Edit
         </a>
-      {% elif product.stock == 0 %}
+      {% elif product.stock < 1 %}
         <button class="btn btn-xs btn-danger fw-bold mt-auto disabled" >
           <svg class="mt-n1 mx-1" width="17" height="15" viewBox="0 0 17 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <g id="Icon">

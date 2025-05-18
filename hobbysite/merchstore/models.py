@@ -30,10 +30,10 @@ class Product(models.Model):
     status = models.CharField(max_length=3, choices=PRODUCT_STATUS, default="AVL")
     prod_type = models.ForeignKey(ProductType, null=True, on_delete=models.SET_NULL)
     owner = models.ForeignKey(Profile, null=False, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, upload_to='merchstore/')
+    image = models.ImageField(null=True, blank=True, upload_to='merchstore/')
 
     def __str__(self):
-        return f"[{self.prod_type.name}] {self.name}: {self.desc} - {self.price} Bells"
+        return f"[{self.prod_type.name}] {self.name}: {self.price} Bells"
 
     def get_absolute_url(self):
         return reverse('merchstore:item', args=[str(self.pk)])
@@ -58,4 +58,4 @@ class Transaction(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"[{self.status}] {self.product.name}: x{self.amount} purchased by {self.buyer}"
+        return f"[{self.status}] {self.product}: x{self.amount} purchased by {self.buyer}"
