@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.contrib.auth.decorators import login_required
 
 from . import models
 from . import forms
@@ -12,7 +13,7 @@ def index(request):
 
 class ThreadListView(ListView):
     model = models.Thread
-    template_name = "thread_list.html" #former threads.html
+    template_name = "forum/thread_list.html" #former threads.html
 
     def get_queryset(self):
         # Load all threads with related categories and authors
@@ -30,13 +31,14 @@ class ThreadListView(ListView):
             user_threads = None
             other_threads = all_threads.order_by("-created_on")
 
-        categorized = {}
+        # Group other users' threads by category
+        threads_by_category = {}
         for thread in other_threads:
-            label = thread.category.name if thread.category else "Uncategorized"
-            categorized.setdefault(label, []).append(thread)
+            category_name = thread.category.name if thread.category else "Uncategorized"
+            threads_by_category.setdefault(category_name, []).append(thread)
 
         context["user_threads"] = user_threads
-        context["threads_by_category"] = categorized
+        context["threads_by_category"] = threads_by_category
         context["create_url"] = reverse_lazy("forum:thread_create")
 
         return context
@@ -64,19 +66,29 @@ class ThreadDetailView(DetailView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
 
+    if request.method == "POST":
         if not request.user.is_authenticated:
             return redirect("login")
 
-        form = forms.CommentForm(request.POST)
+        comment_form = forms.CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.thread = self.object
+            comment = comment_form.save(commit=False)
+            comment.thread = thread
             comment.author = request.user.profile
             comment.save()
-            return redirect(self.object.get_absolute_url())
+            return redirect("forum:thread_detail", pk=thread.pk)
+    else:
+        comment_form = forms.CommentForm()
 
-        context = self.get_context_data(comment_form=form)
-        return self.render_to_response(context)
+    context = {
+        "thread": thread,
+        "related_threads": related_threads,
+        "comments": comments,
+        "comment_form": comment_form,
+        "can_edit": request.user.is_authenticated and thread.author.user == request.user
+    }
+
+    return render(request, "forum/thread_view.html", context)
 
 
 class ThreadCreateView(LoginRequiredMixin, CreateView):
@@ -84,22 +96,19 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
     fields = ["title", "entry", "image", "category"]
     template_name = "thread_form.html"
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        return super().form_valid(form)
+    return render(request, "forum/thread_form.html", {"form": form})
 
-    def get_success_url(self):
-        return self.object.get_absolute_url()
+  
+@login_required
+def thread_update(request, pk):
+    thread = get_object_or_404(models.Thread, pk=pk)
 
+    if thread.author.user != request.user:
+        return redirect("forum:thread_detail", pk=pk)
 
 class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = models.Thread
     fields = ["title", "entry", "image", "category"]
     template_name = "thread_form.html"
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
-    def test_func(self):
-        thread = self.get_object()
-        return thread.author.user == self.request.user
+    
+    return render(request, "forum/thread_form.html", {"form": form})
