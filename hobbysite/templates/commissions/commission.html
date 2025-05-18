@@ -2,33 +2,40 @@
 {% load static %}
 
 {% block title %}Commission{% endblock %}
-
 {% block content %}
     <h1>{{ commission.title }}</h1>
-    <ul>
-        <li><b>Created On: </b>{{ commission.created_on }}</li>
-        <li><b>Last Updated On: </b>{{ commission.updated_on }}</li>
-        <li><b>Status: </b>{{ commission.status }}</li>
-        <li><b>Total Manpower: </b>{{ total_manpower }}</li>
-        <li><b>Open Manpower: </b>{{ open_manpower }}</li>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Author: </b>{{ commission.author }}</li>
+        <li class="list-group-item"><b>Created On: </b>{{ commission.created_on }}</li>
+        <li class="list-group-item"><b>Last Updated On: </b>{{ commission.updated_on }}</li>
+        <li class="list-group-item"><b>Status: </b>{{ commission.status }}</li>
+        <li class="list-group-item"><b>Total Manpower: </b>{{ total_manpower }}</li>
+        <li class="list-group-item"><b>Open Manpower: </b>{{ open_manpower }}</li>
     </ul>
-    <p>{{ commission.description }}</p>
+    <p class="card" style="padding:1em">{{ commission.description }}</p>
 
     <h2>Jobs</h2>
     {% for job in commission.jobs.all %}
-    <div>
-        <h3>Job: {{ job.role }}</h3>
-        <ul>
-            <li><b>Status: </b>{{ job.status }}</li>
-            <li><b>Manpower Required: </b>{{ job.manpower_required }}</li>
+    <div class="card" style="padding: 1em">
+        <h3>{{ job.role }}</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Status: </b>{{ job.status }}</li>
+            <li class="list-group-item"><b>Manpower Required: </b>{{ job.manpower_required }}</li>
         </ul>
 
+        {% if user.is_authenticated and open_manpower != 0 %}
         <form method="post">
             {% csrf_token %}
             <input type="hidden" name="job_id" value="{{ job.id }}">
-            <button type="submit">Apply to Job</button>
+            <button type="submit" class="btn btn-secondary" style="margin-top: 1em">Apply to Job</button>
         </form>
+        {% endif %}
     </div>
-{% endfor %}
+    {% endfor %}
 
+    {% if user.is_authenticated %}
+        {% if user.profile == commission.author %}
+            <a href="{% url 'commissions:commission-edit' commission.pk %}">Edit Commission</a>
+        {% endif %}
+    {% endif %}
 {% endblock %}

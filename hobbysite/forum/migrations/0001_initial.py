@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="ProductType",
+            name="ThreadCategory",
             fields=[
                 (
                     "id",
@@ -26,14 +26,14 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("name", models.CharField(max_length=255)),
-                ("desc", models.TextField()),
+                ("description", models.TextField()),
             ],
             options={
                 "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name="Product",
+            name="Thread",
             fields=[
                 (
                     "id",
@@ -44,84 +44,75 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("name", models.CharField(max_length=255)),
-                ("desc", models.TextField()),
-                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
-                ("stock", models.IntegerField()),
+                ("title", models.CharField(max_length=255)),
+                ("entry", models.TextField()),
                 (
-                    "status",
-                    models.CharField(
-                        choices=[
-                            ("AVL", "Available"),
-                            ("SAL", "On Sale"),
-                            ("OUT", "Out of Stock"),
-                        ],
-                        default="AVL",
-                        max_length=3,
+                    "image",
+                    models.ImageField(
+                        blank=True, null=True, upload_to="thread_images/"
+                    ),
+                ),
+                ("created_on", models.DateTimeField(auto_now_add=True)),
+                ("updated_on", models.DateTimeField(auto_now=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="threads",
+                        to="profile.profile",
                     ),
                 ),
                 (
-                    "owner",
+                    "category",
                     models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="threads",
+                        to="forum.threadcategory",
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ["-created_on"],
+            },
+        ),
+        migrations.CreateModel(
+            name="Comment",
+            fields=[
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("entry", models.TextField()),
+                ("created_on", models.DateTimeField(auto_now_add=True)),
+                ("updated_on", models.DateTimeField(auto_now=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="forum_comments",
+                        to="profile.profile",
+                    ),
+                ),
+                (
+                    "thread",
+                    models.ForeignKey(
+                        null=True,
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="profile.profile",
-                    ),
-                ),
-                (
-                    "prod_type",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        to="merchstore.producttype",
+                        related_name="forum_comments",
+                        to="forum.thread",
                     ),
                 ),
             ],
             options={
-                "ordering": ["name"],
+                "ordering": ["-created_on"],
             },
-        ),
-        migrations.CreateModel(
-            name="Transaction",
-            fields=[
-                (
-                    "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                ("amount", models.IntegerField()),
-                (
-                    "status",
-                    models.CharField(
-                        choices=[
-                            ("CRT", "On Cart"),
-                            ("PAY", "To Pay"),
-                            ("SHP", "To Ship"),
-                            ("RCV", "To Receive"),
-                        ],
-                        max_length=3,
-                        null=True,
-                    ),
-                ),
-                (
-                    "buyer",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        to="profile.profile",
-                    ),
-                ),
-                (
-                    "product",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
-                        to="merchstore.product",
-                    ),
-                ),
-            ],
         ),
     ]
