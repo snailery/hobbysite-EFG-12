@@ -21,12 +21,13 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL, related_name='wiki_author', blank=True)
     entry = models.TextField()
+    header_image = models.ImageField(upload_to='images/wiki', null=True)
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
     category_type = models.ForeignKey(ArticleCategory, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"[{self.category_type.name}] {self.title} (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
+        return f"{self.title}"
 
     def get_absolute_url(self):
         return reverse('wiki:article_detail', args=[str(self.pk)])
@@ -43,9 +44,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"[{self.author.username if self.author else 'Deleted User'}]  (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
-
-    #def get_absolute_url(self):
-        #return reverse('wiki:article', args=[str(self.pk)])
 
     class Meta:
         ordering = ['created_on']

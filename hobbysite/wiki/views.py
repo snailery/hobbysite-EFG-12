@@ -34,9 +34,8 @@ class ArticleDetailView(DetailView):
     template_name = 'wiki/article.html'
 
     def get_context_data(self, **kwargs):
-        self.object = self.get_object()
         ctx = super().get_context_data(**kwargs)
-        article = self.object
+        article = self.get_object()
 
         ctx['article'] = article
         ctx['comment_form'] = CommentForm()
@@ -62,21 +61,20 @@ class ArticleDetailView(DetailView):
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
-    form_class = ArticleForm
     template_name = 'wiki/create_article.html'
-
-    def get_success_url(self):
-        return reverse_lazy('wiki:article_detail', kwargs={ 'pk': self.object.pk})
+    fields = ['title', 'entry', 'category_type', 'header_image']
     
     def form_valid(self, form):
-        author = Profile.objects.get(user=self.request.user)
-        form.instance.author = author
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.author = profile
         return super().form_valid(form)
     
     def get_context_data(self, **kwargs):
-        author = Profile.objects.get(user=self.request.user)
         ctx = super().get_context_data(**kwargs)
         return ctx
+    
+    def get_success_url(self):
+        return reverse_lazy('wiki:article_detail', kwargs={'pk': self.object.pk})
 
 class ArticleUpdateView(UpdateView):
     model = Article

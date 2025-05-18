@@ -6,7 +6,7 @@
     {% if request.user.is_authenticated and user.profile == article.author %}
             <a href="{% url 'wiki:edit_article' pk=object.pk %}">Edit Article</a>
     {% endif %}
-
+    <img src="{{ article.header_image.url }}">
     <h3><b>{{ article.title }}</b></h3>
     <h4><b>Category Type:</b> {{ article.category_type }}</h4>
     <p><b>Created On:</b> {{ article.created_on }}</p>
