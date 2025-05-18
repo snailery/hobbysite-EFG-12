@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinValueValidator
+
 from profile.models import Profile
 
 class ProductType(models.Model):
@@ -52,7 +54,7 @@ class Transaction(models.Model):
 
     buyer = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
-    amount = models.IntegerField()
+    amount = models.IntegerField(validators=[MinValueValidator(1)])
     status = models.CharField(
         max_length=3, choices=TRANSACTION_STATUS, default="CRT")
     created_on = models.DateTimeField(auto_now_add=True)
