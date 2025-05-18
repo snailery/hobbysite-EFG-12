@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cart{% endblock %}
+
+{% block styles %}
+  <link href="{% static 'plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css"/>
+  <style>
+    .bg-gray-200 {
+      background-color: var(--bs-gray-200) !important;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<!-- Top Decoration -->
+<div class="position-absolute top-0 start-0 w-100 z-index-1" id="wave-top">
+  <svg width="current" height="323" preserveAspectRatio="none" viewBox="0 0 1207 323" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path opacity="0.5" d="M393.686 289.889C269.07 349.595 80.0871 314.767 1.17236 289.889V0H1207V291.082C1193.19 293.462 1158.06 300.543 1128.03 309.831C971.466 344.495 823.963 302.252 762.622 280.137C571.828 235.268 412.286 285.005 393.686 289.889Z" fill="#E1E3EA"/>
+    <path d="M397.573 266.969C294.093 289.534 89.9594 276.371 0.827637 266.969V0H1206.66V266.969C1138.07 283.894 889.195 281.728 824.147 266.969C672.841 241.122 458.405 255.329 397.573 266.969Z" fill="#E1E3EA"/>
+  </svg>    
+</div>
+
+<main class="position-relative text-arial-rounded z-index-2">
+  <ol class="breadcrumb breadcrumb-arrow text-muted fs-6 fw-bold text-poppins mb-3">
+    <li class="breadcrumb-item">
+      <a href="/" class="">
+        <i class="ki-duotone ki-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item"><a href="#" class="text-muted">MerchStore</a></li>
+    {% if header == "Your Cart" %}
+      <li class="breadcrumb-item text-gray-800">Cart</li>
+    {% else %}
+      <li class="breadcrumb-item text-gray-800">Transactions</li>
+    {% endif %}
+  </ol>
+  <header class="d-flex justify-content-between pt-4 pb-8">
+    <div>
+      <h2 class="m-0">{{ header }}</h2>
+      <p class="fs-5 m-0 text-gray-600 fw-bold">Showing {{ transactions.count }} results.</p>
+    </div>
+  </header>
+  <article class="card card-flush">
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+      <div class="card-title">
+        <!--Search-->
+        <div class="d-flex align-items-center position-relative my-1">
+            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-4">
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>               
+            <input id="search" type="text"class="form-control form-control-solid w-250px ps-12" placeholder="Search Orders">
+        </div>
+    </div>
+    </div>
+    <div class="card-body pt-0 text-poppins">
+      <table id="transaction-table" class="table align-middle table-row-dashed fs-6 mb-0">
+        <thead>
+          <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+            <th>Product</th>
+            {% if header == "Products Sold" %}
+              <th>Buyer</th>
+            {% else%}
+              <th>Owner</th>
+            {% endif %}
+            <th class="text-end pe-0">Price</th>
+            <th class="text-end pe-0">Amt (Qty)</th>
+            <th class="text-end pe-0">Total Price</th>
+            <th class="text-end pe-0">Date Added</th>
+            <th class="text-end">Status</th>
+          </tr>
+        </thead>
+        <tbody class="fw-semibold text-gray-600">
+          {% for item in transactions %}
+            <tr>
+              <td class="d-flex flex-row align-items-center gap-4">
+                <figure class="w-75px bg-gray-300 rounded m-0 ratio ratio-1x1">
+                  {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}">
+                  {% else %}
+                    <span class="fs-2x text-arial-rounded align-content-center text-gray-500 w-100 text-center my-auto">{{ item.product.name|slice:"0:1" }}</span>
+                  {% endif %}
+                </figure>
+                <div class="d-flex flex-column gap-1">
+                  <a href="{% url 'merchstore:item' item.product.pk %}" class="text-body">{{ item.product.name }}</a>
+                  {% if header == "Your Cart" %}
+                    <a href="#" class="fw-normal text-gray-600 fst-italic">@ {{ item.product.owner.user }} ({{ item.product.owner }}) </a>
+                  {% endif %}
+                </div>
+              </td>
+              {% if header == "Products Sold" %}
+                <td>Sold to: @{{ item.buyer.user }} ({{ item.buyer }})</td>
+              {% else %}
+                <td>{{ item.product.owner.user }} ({{ item.product.owner }})</td>
+              {% endif %}
+              <td class="text-end">{{ item.product.price }}</td>
+              <td class="text-end">{{ item.amount }}</td>
+              {% widthratio item.product.price 1 item.amount as total %}
+              <td class="text-end">{{ total|floatformat:2 }}</td>
+              <td class="text-end">{{ item.created_on }}</td>
+              <td class="text-end">
+                {% if item.status == "RCV" %}
+                  <span class="badge badge-light-success badge-lg fw-normal">{{ item.get_status_display }}</span>
+                {% elif item.status == "PAY" %}
+                  <span class="badge badge-light-danger badge-lg fw-normal">{{ item.get_status_display }}</span>
+                {% elif item.status == "SHP" %}
+                  <span class="badge badge-light-warning badge-lg fw-normal">{{ item.get_status_display }}</span>
+                {% else %}
+                  <span class="badge badge-light-primary badge-lg fw-normal">{{ item.get_status_display }}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+</main>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'plugins/custom/datatables/datatables.bundle.js' %}"></script>
+  <script>
+    var groupColumn = 1;
+    let table = $("#transaction-table").DataTable({
+      columnDefs: [{ visible: false, targets: groupColumn }],
+      order: [[groupColumn, 'asc']],
+      drawCallback: function (settings) {
+        var api = this.api();
+        var rows = api.rows({ page: 'current' }).nodes();
+        var last = null;
+ 
+        api.column(groupColumn, { page: 'current' })
+          .data()
+          .each(function (group, i) {
+            if (last !== group) {
+              $(rows)
+                .eq(i)
+                .before(
+                  '<tr class="group"><td class="ps-4 cursor-pointer bg-gray-200 text-gray-600 rounded" colspan="6">' + group + '</td></tr>'
+                );
+              last = group;
+              }
+          });
+        }
+    });
+    
+    $("#transaction-table tbody").on("click", "tr.group", function () {
+      var currentOrder = table.order()[0];
+      if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+          table.order([[groupColumn, 'desc']]).draw();
+      }
+      else {
+          table.order([[groupColumn, 'asc']]).draw();
+      }
+  });
+
+    $("#search").on('keyup', function () {
+      table.search(this.value).draw();
+    });
+
+  </script>
+{% endblock %}
