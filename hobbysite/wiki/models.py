@@ -19,7 +19,7 @@ class ArticleCategory(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL, related_name='wiki_author')
+    author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL, related_name='wiki_author', blank=True)
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True, editable=False)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
@@ -42,7 +42,7 @@ class Comment(models.Model):
     updated_on = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
-        return f"[{self.category_type.name}] {self.title} (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
+        return f"[{self.author.username if self.author else 'Deleted User'}]  (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
 
     #def get_absolute_url(self):
         #return reverse('wiki:article', args=[str(self.pk)])
