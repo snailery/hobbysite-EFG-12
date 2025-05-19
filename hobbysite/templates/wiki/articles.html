@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Article List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Wiki</h1>
+
+    {% if request.user.is_authenticated %}
+    <div class="mb-5">
+        <h2>Your Articles</h2>
+        <div class="list-group mb-3">
+            {% for personal_article in my_articles %}
+                <div class="mb-2">
+                    <div class="d-inline-block px-3 py-2 bg-light rounded shadow-sm">
+                        <a href="{{ personal_article.get_absolute_url }}" class="text-decoration-none fw-medium text-dark">
+                            {{ personal_article.title }}
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">You haven't written any articles yet.</p>
+            {% endfor %}
+        </div>
+        <a href="{% url 'wiki:create_article' %}" class="btn btn-primary">Create New Article</a>
+    </div>
+    {% endif %}
+
+    <div>
+        <h2>All Articles</h2>
+        <div class="row">
+            {% for article in all_articles %}
+                {% if article not in my_articles %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title mb-2">
+                                <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-dark">
+                                    {{ article.title }}
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted small mb-0">By {{ article.author }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% empty %}
+                <p class="text-muted">No articles available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
