@@ -1,41 +1,114 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Article{% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
+
 {% block content %}
-    {% if request.user.is_authenticated and user.profile == article.author %}
-            <a href="{% url 'wiki:update_article' pk=object.pk %}">Edit Article</a>
-    {% endif %}
-    <img src="{{ article.header_image.url }}">
-    <h3><b>{{ article.title }}</b></h3>
-    <h4><b>Category Type:</b> {{ article.category_type }}</h4>
-    <p><b>Created On:</b> {{ article.created_on }}</p>
-    <p><b>Last Updated On:</b> {{ article.updated_on }}</p>
-    <br>
-    <p><pre> {{ article.entry }}</p>
+<div class="position-absolute top-0 start-0 w-100 z-index-1" id="wave-top">
+</div>
 
-    <br>
+<main class="position-relative z-index-2 text-poppins">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card shadow p-5 rounded-4">
 
-    {% if request.user.is_authenticated %}
-    <h4>Comments</h4>
-        <form method="POST">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit">Post Comment</button>
-        </form>
-        {% for comment in article.comment_set.all %}
-            <p><b>{{ comment.author }}</b> ({{ comment.created_on }}) - {{ comment.entry }}</p>
-        {% endfor %}
-    <br>
-    {% endif %}
+          <div class="mb-5 text-center">
+            <h1 class="display-4 fw-bold text-dark">{{ article.title }}</h1>
+            <p class="text-muted">Created: {{ article.created_on }} | Updated: {{ article.updated_on|date }}</p>
+          </div>
 
-    <h3>Other Related Articles:</h3>
-        {% for similar_article in similar_articles %}
-            <a href="{{ similar_article.get_absolute_url }}">{{ similar_article }}</a>
-        {% endfor %}
+          {% if request.user.is_authenticated and user.profile == article.author %}
+          <div class="text-end mb-3">
+            <a href="{% url 'wiki:update_article' pk=article.pk %}" class="btn btn-sm btn-outline-primary">
+              <i class="ki-duotone ki-pencil"></i> Edit Article
+            </a>
+          </div>
+          {% endif %}
 
+          {% if article.header_image %}
+          <div class="text-center mb-5">
+            <img src="{{ article.header_image.url }}" class="img-fluid rounded shadow-sm w-75">
+          </div>
+          {% endif %}
 
+          <!-- Category Badge -->
+          <div class="mb-4">
+            <span class="badge" style="background-color: #e2e3e5; color: #000;">{{ article.category_type }}</span>
+          </div>
 
-    <a href="{{ article.get_absolute_url }}">Back</a>
-    
+          <!-- Entry Content -->
+          <div class="mb-5 px-3 py-4 bg-light border rounded-4 shadow-sm">
+            <div class="fs-5 lh-lg text-dark" style="white-space: pre-wrap;">{{ article.entry }}</div>
+          </div>
+
+          <!-- Comments Section -->
+          {% if request.user.is_authenticated %}
+            <section class="mb-5 text-center">
+            <h3 class="mb-4 fw-semibold">Comments</h3>
+
+            <!-- Comment Form -->
+            <form method="post" class="mb-5 mx-auto text-start" style="max-width: 600px;">
+                {% csrf_token %}
+                <div class="mb-3">
+                {{ comment_form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+
+            <!-- Comments List -->
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                {% for comment in article.comment_set.all %}
+                <div class="card mb-4 shadow-sm border-0 rounded-4 text-start">
+                    <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong class="text-dark">{{ comment.author }}</strong>
+                        <small class="text-muted">{{ comment.created_on|date:"M d, Y - H:i" }}</small>
+                    </div>
+                    <hr class="my-2">
+                    <p class="mb-0 lh-lg text-dark fs-6 text-secondary">{{ comment.entry }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No comments yet.</p>
+                {% endfor %}
+                </div>
+            </div>
+            </section>
+            {% endif %}
+
+          <!-- Related Articles -->
+          {% if similar_articles %}
+          <section class="mb-5 text-center">
+            <h4 class="mb-4">Related Articles</h4>
+            <div class="row justify-content-center">
+              {% for similar_article in similar_articles %}
+              <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card h-100 shadow-sm border-0 rounded-3">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <a href="{{ similar_article.get_absolute_url }}" class="text-decoration-none text-dark">
+                        {{ similar_article.title }}
+                      </a>
+                    </h5>
+                    <p class="card-text text-muted small">By {{ similar_article.author }}</p>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+
+          <!-- Back Button -->
+          <div class="text-end">
+            <a href="{% url 'wiki:article_list' %}" class="btn btn-outline-secondary">Back to Articles</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 {% endblock %}
