@@ -97,6 +97,24 @@ section:not(.items) {
   height: calc(100% - 67px);
 }
 
+section:has(> main#login-page ) {
+  background-color: var(--bs-gray-300);
+}
+
+section:has(> main#login-page )::before {
+  top: 0;
+  left: 0;
+  position: absolute;
+  display: block;
+  content: " ";
+  height: 100%;
+  width: 100%;
+  background-image: url('../media/bg-pattern.png');
+  mix-blend-mode: multiply;
+  opacity: 15%;
+  overflow: hidden;
+}
+
 section:has(> main#product-details ) {
   background-color: var(--bs-gray-100);
   overflow: hidden;
