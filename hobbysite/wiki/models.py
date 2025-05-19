@@ -43,7 +43,7 @@ class Comment(models.Model):
     updated_on = models.DateTimeField(auto_now=True, editable=False)
 
     def __str__(self):
-        return f"[{self.author.username if self.author else 'Deleted User'}]  (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
+        return f"[{self.author.user if self.author else 'Deleted User'}]  (Created On: {self.created_on} Last Updated On: {self.updated_on}) - {self.entry}"
 
     class Meta:
         ordering = ['created_on']

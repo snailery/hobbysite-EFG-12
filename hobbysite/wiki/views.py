@@ -1,12 +1,12 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 
-from .models import Article, ArticleCategory, Comment
+from .models import Article, Comment
 from .forms import ArticleForm, CommentForm
 from profile.models import Profile
 
@@ -21,8 +21,9 @@ class ArticleListView(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            profile = Profile.objects.get(user=self.request.user)
+        user = self.request.user
+        if user.is_authenticated:
+            profile = get_object_or_404(Profile, user=user)
             my_articles = Article.objects.filter(author=profile)
             ctx ['my_articles'] = my_articles
         else:
