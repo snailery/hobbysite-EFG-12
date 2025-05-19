@@ -5,9 +5,26 @@ from django.core.exceptions import ValidationError
 
 
 class ProfileRegisterForm(forms.ModelForm):
-    username = forms.CharField(max_length=150)
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput)
+    username = forms.CharField(max_length=150, widget=forms.TextInput(
+        attrs={
+            "class": "form-control bg-transparent",
+            "placeholder": "Username"
+        }
+    ))
+    password1 = forms.CharField(label="Password", 
+        widget=forms.PasswordInput(
+            attrs = {
+                "class": "form-control bg-transparent",
+                "placeholder": "Password"
+            }
+        )
+    )
+    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(
+        attrs={
+            "class": "form-control bg-transparent",
+            "placeholder": "Confirm Password"
+        }
+    ))
 
     class Meta:
         model = Profile
