@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Article - {{ article.title }}{% endblock %}
+
+{% block content %}
+  <h2>Edit Article</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ update_form.as_p }}
+    <button type="submit">Save changes</button>
+  </form>
+  <p><a href="{% url 'article_detail' article.pk %}">Cancel</a></p>
+{% endblock %}

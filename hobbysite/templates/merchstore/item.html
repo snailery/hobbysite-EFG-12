@@ -40,8 +40,10 @@
     <li class="breadcrumb-item text-gray-800">Product Details</li>
   </ol>
   <article class="d-flex flex-column flex-lg-row justify-content-between align-items-center align-items-lg-center h-100 w-lg-900px w-100 m-auto">
-    <figure class="h-50 h-lg-100 w-400px bg-gray-400 opacity-50">
-
+    <figure class="d-flex h-50 h-lg-100 w-400px align-items-center justify-content-center overflow-hidden">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" class="img-fluid">
+      {% endif %}
     </figure>
 
     <figcaption class="card d-flex flex-col gap-6 p-9 w-100 w-md-600px w-lg-400px h-fit overflow-y-auto">
@@ -50,7 +52,6 @@
           <h2>{{ product.name }}</h2>
           <span class="fw-bold fs-4 text-gray-500">{{ product.prod_type }}</span>
         </div>
-
         {% if product.status == "SAL" %}
           <span class="badge badge-light-success badge-lg align-self-start">{{ product.get_status_display }}</span>
         {% elif product.status == "OUT" %}
@@ -65,7 +66,7 @@
         <a href="{% url 'profile:profile' product.owner.user.username %}" class="text-decoration-underline text-poppins text-gray-500 fw-bold fs-6">{{ product.owner.user.username }}</a>
       </div>
 
-      <p class="text-gray-800 text-poppins mb-6">{{ product.desc }}</p>
+      <p class="text-gray-800 text-poppins m-0">{{ product.desc }}</p>
       {% if request.user == product.owner.user %}
         <a href="{% url 'merchstore:item-update' product.pk %}" class="btn btn-xs btn-light-primary fw-bold mt-auto">
           <i class="ki-duotone ki-pencil fs-4">
@@ -74,18 +75,38 @@
           </i>
           Edit
         </a>
+      {% elif product.stock < 1 %}
+        <button class="btn btn-xs btn-danger fw-bold mt-auto disabled" >
+          <svg class="mt-n1 mx-1" width="17" height="15" viewBox="0 0 17 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <g id="Icon">
+            <path id="Body" fill-rule="evenodd" clip-rule="evenodd" d="M3.16708 2.07451H1.63906C1.28004 2.07451 0.989005 1.78347 0.989005 1.42446V0.931944C0.989005 0.572929 1.28004 0.28189 1.63906 0.28189H3.87899C3.91684 0.279391 3.95453 0.279426 3.99185 0.28189H4.04428C4.27792 0.28189 4.48276 0.405136 4.59734 0.590165C4.66229 0.66812 4.71452 0.758989 4.74975 0.860699L5.52568 3.10121H16.1833V5.8839C16.1833 7.5593 14.8252 8.91748 13.1498 8.91748H8.20346C7.96823 8.91748 7.73847 8.89406 7.51639 8.84941L7.74431 9.50753L15.2969 9.50745C15.6559 9.50745 15.947 9.79849 15.947 10.1575V10.5705C15.947 10.9296 15.6559 11.2206 15.2969 11.2206H14.9416C15.1658 11.5355 15.2972 11.9178 15.2972 12.3299C15.2972 13.4069 14.3998 14.28 13.2928 14.28C12.1859 14.28 11.2885 13.4069 11.2885 12.3299C11.2885 11.9178 11.4199 11.5355 11.6441 11.2206H10.1745C10.3987 11.5355 10.5301 11.9178 10.5301 12.3299C10.5301 13.4069 9.63274 14.28 8.52578 14.28C7.41882 14.28 6.52145 13.4069 6.52145 12.3299C6.52145 11.9259 6.64772 11.5506 6.86395 11.2393C6.54268 11.2046 6.25462 10.9898 6.14162 10.6635L3.16708 2.07451ZM14.3814 4.30215C14.3814 4.0558 14.1817 3.8561 13.9354 3.8561C13.689 3.8561 13.4893 4.0558 13.4893 4.30215V7.3145C13.4893 7.56084 13.689 7.76055 13.9354 7.76055C14.1817 7.76055 14.3814 7.56084 14.3814 7.3145V4.30215ZM11.884 3.8561C12.1304 3.8561 12.3301 4.0558 12.3301 4.30215V7.3145C12.3301 7.56084 12.1304 7.76055 11.884 7.76055C11.6377 7.76055 11.438 7.56084 11.438 7.3145V4.30215C11.438 4.0558 11.6377 3.8561 11.884 3.8561ZM10.2787 4.30215C10.2787 4.0558 10.079 3.8561 9.83266 3.8561C9.58632 3.8561 9.38661 4.0558 9.38661 4.30215V7.3145C9.38661 7.56084 9.58632 7.76055 9.83266 7.76055C10.079 7.76055 10.2787 7.56084 10.2787 7.3145V4.30215ZM7.7813 3.8561C8.02765 3.8561 8.22735 4.0558 8.22735 4.30215V7.3145C8.22735 7.56084 8.02765 7.76055 7.7813 7.76055C7.53495 7.76055 7.33525 7.56084 7.33525 7.3145V4.30215C7.33525 4.0558 7.53495 3.8561 7.7813 3.8561Z" fill="white"/>
+            </g>
+          </svg>          
+          Sold Out
+        </button>
       {% else %}
-        {% if product.stock == 0 %}
-          <button class="btn btn-xs btn-danger fw-bold mt-auto disabled" >
-            <svg class="mt-n1 mx-1" width="17" height="15" viewBox="0 0 17 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <g id="Icon">
-              <path id="Body" fill-rule="evenodd" clip-rule="evenodd" d="M3.16708 2.07451H1.63906C1.28004 2.07451 0.989005 1.78347 0.989005 1.42446V0.931944C0.989005 0.572929 1.28004 0.28189 1.63906 0.28189H3.87899C3.91684 0.279391 3.95453 0.279426 3.99185 0.28189H4.04428C4.27792 0.28189 4.48276 0.405136 4.59734 0.590165C4.66229 0.66812 4.71452 0.758989 4.74975 0.860699L5.52568 3.10121H16.1833V5.8839C16.1833 7.5593 14.8252 8.91748 13.1498 8.91748H8.20346C7.96823 8.91748 7.73847 8.89406 7.51639 8.84941L7.74431 9.50753L15.2969 9.50745C15.6559 9.50745 15.947 9.79849 15.947 10.1575V10.5705C15.947 10.9296 15.6559 11.2206 15.2969 11.2206H14.9416C15.1658 11.5355 15.2972 11.9178 15.2972 12.3299C15.2972 13.4069 14.3998 14.28 13.2928 14.28C12.1859 14.28 11.2885 13.4069 11.2885 12.3299C11.2885 11.9178 11.4199 11.5355 11.6441 11.2206H10.1745C10.3987 11.5355 10.5301 11.9178 10.5301 12.3299C10.5301 13.4069 9.63274 14.28 8.52578 14.28C7.41882 14.28 6.52145 13.4069 6.52145 12.3299C6.52145 11.9259 6.64772 11.5506 6.86395 11.2393C6.54268 11.2046 6.25462 10.9898 6.14162 10.6635L3.16708 2.07451ZM14.3814 4.30215C14.3814 4.0558 14.1817 3.8561 13.9354 3.8561C13.689 3.8561 13.4893 4.0558 13.4893 4.30215V7.3145C13.4893 7.56084 13.689 7.76055 13.9354 7.76055C14.1817 7.76055 14.3814 7.56084 14.3814 7.3145V4.30215ZM11.884 3.8561C12.1304 3.8561 12.3301 4.0558 12.3301 4.30215V7.3145C12.3301 7.56084 12.1304 7.76055 11.884 7.76055C11.6377 7.76055 11.438 7.56084 11.438 7.3145V4.30215C11.438 4.0558 11.6377 3.8561 11.884 3.8561ZM10.2787 4.30215C10.2787 4.0558 10.079 3.8561 9.83266 3.8561C9.58632 3.8561 9.38661 4.0558 9.38661 4.30215V7.3145C9.38661 7.56084 9.58632 7.76055 9.83266 7.76055C10.079 7.76055 10.2787 7.56084 10.2787 7.3145V4.30215ZM7.7813 3.8561C8.02765 3.8561 8.22735 4.0558 8.22735 4.30215V7.3145C8.22735 7.56084 8.02765 7.76055 7.7813 7.76055C7.53495 7.76055 7.33525 7.56084 7.33525 7.3145V4.30215C7.33525 4.0558 7.53495 3.8561 7.7813 3.8561Z" fill="white"/>
-              </g>
-            </svg>          
-            Sold Out
-          </button>
-        {% else %}
-          <button class="btn btn-xs btn-green fw-bold mt-auto" >
+        <form method="POST" id="transaction-form" class="p-0 m-0 mt-auto">
+          {% csrf_token %}
+          <div class="fv-row">
+            <div class="d-flex flex-row align-items-center">
+              <label for="amount" class="form-label fw-bold w-100 fs-5 m-0">Stock</label>
+              <div class="position-relative w-100" data-kt-dialer="true"
+                data-kt-dialer-min="0"
+                data-kt-dialer-max="{{ product.stock }}"
+                data-kt-dialer-step="1">
+                <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 start-0" data-kt-dialer-control="decrease">
+                  <i class="ki-duotone ki-minus-square fs-2"><span class="path1"></span><span class="path2"></span></i>
+                </button>
+
+                {{ form.amount }}
+
+                <button type="button" class="btn btn-icon btn-active-color-gray-700 position-absolute translate-middle-y top-50 end-0" data-kt-dialer-control="increase">
+                    <i class="ki-duotone ki-plus-square fs-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-xs btn-green fw-bold mt-6 w-100" id="add-to-cart">
             <svg class="mt-n1 mx-1" width="17" height="15" viewBox="0 0 17 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <g id="Icon">
               <path id="Body" fill-rule="evenodd" clip-rule="evenodd" d="M3.16708 2.07451H1.63906C1.28004 2.07451 0.989005 1.78347 0.989005 1.42446V0.931944C0.989005 0.572929 1.28004 0.28189 1.63906 0.28189H3.87899C3.91684 0.279391 3.95453 0.279426 3.99185 0.28189H4.04428C4.27792 0.28189 4.48276 0.405136 4.59734 0.590165C4.66229 0.66812 4.71452 0.758989 4.74975 0.860699L5.52568 3.10121H16.1833V5.8839C16.1833 7.5593 14.8252 8.91748 13.1498 8.91748H8.20346C7.96823 8.91748 7.73847 8.89406 7.51639 8.84941L7.74431 9.50753L15.2969 9.50745C15.6559 9.50745 15.947 9.79849 15.947 10.1575V10.5705C15.947 10.9296 15.6559 11.2206 15.2969 11.2206H14.9416C15.1658 11.5355 15.2972 11.9178 15.2972 12.3299C15.2972 13.4069 14.3998 14.28 13.2928 14.28C12.1859 14.28 11.2885 13.4069 11.2885 12.3299C11.2885 11.9178 11.4199 11.5355 11.6441 11.2206H10.1745C10.3987 11.5355 10.5301 11.9178 10.5301 12.3299C10.5301 13.4069 9.63274 14.28 8.52578 14.28C7.41882 14.28 6.52145 13.4069 6.52145 12.3299C6.52145 11.9259 6.64772 11.5506 6.86395 11.2393C6.54268 11.2046 6.25462 10.9898 6.14162 10.6635L3.16708 2.07451ZM14.3814 4.30215C14.3814 4.0558 14.1817 3.8561 13.9354 3.8561C13.689 3.8561 13.4893 4.0558 13.4893 4.30215V7.3145C13.4893 7.56084 13.689 7.76055 13.9354 7.76055C14.1817 7.76055 14.3814 7.56084 14.3814 7.3145V4.30215ZM11.884 3.8561C12.1304 3.8561 12.3301 4.0558 12.3301 4.30215V7.3145C12.3301 7.56084 12.1304 7.76055 11.884 7.76055C11.6377 7.76055 11.438 7.56084 11.438 7.3145V4.30215C11.438 4.0558 11.6377 3.8561 11.884 3.8561ZM10.2787 4.30215C10.2787 4.0558 10.079 3.8561 9.83266 3.8561C9.58632 3.8561 9.38661 4.0558 9.38661 4.30215V7.3145C9.38661 7.56084 9.58632 7.76055 9.83266 7.76055C10.079 7.76055 10.2787 7.56084 10.2787 7.3145V4.30215ZM7.7813 3.8561C8.02765 3.8561 8.22735 4.0558 8.22735 4.30215V7.3145C8.22735 7.56084 8.02765 7.76055 7.7813 7.76055C7.53495 7.76055 7.33525 7.56084 7.33525 7.3145V4.30215C7.33525 4.0558 7.53495 3.8561 7.7813 3.8561Z" fill="white"/>
@@ -93,7 +114,7 @@
             </svg>          
             Add to Cart
           </button>
-        {% endif %}
+        </form>
       {% endif %}
     </figcaption>
   </article>
@@ -109,4 +130,46 @@
   </svg>    
 </div>
     
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const form = document.getElementById("transaction-form");
+    var validator = FormValidation.formValidation(
+      form,
+      {
+        fields: {
+          "amount": {
+            validators: {
+              greaterThan: {
+                min: 1,
+                message: "Amount must be greater than 0."
+              }
+            }
+          },
+        },
+
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          bootstrap: new FormValidation.plugins.Bootstrap5({
+            rowSelector: '.fv-row',
+            eleInvalidClass: '',
+            eleValidClass: ''
+          })
+        }
+      }
+    );
+
+    const submitButton = document.getElementById("add-to-cart");
+    submitButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (validator) {
+        validator.validate().then(function (status) {
+          if (status == 'Valid') {
+            form.submit()
+          }
+        })
+      }
+    });
+  </script>
 {% endblock %}

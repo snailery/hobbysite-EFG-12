@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if register_form.errors %}
+        {% for field in register_form %}
+            {% for error in field.errors %}
+                {{ error }}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    
+  <main class="d-flex justify-content-center align-items-center" id="login-page">
+    <div class="card d-flex flex-column align-items-stretch flex-center rounded-4 w-md-400px p-12">
+      <form method="POST" class="form w-100 fv-plugins-bootstrap5 fv-plugins-framework">
+        {% csrf_token %}
+        
+        <div class="text-center mb-11">
+          <h1 class="text-gray-900 fw-bolder mb-3">Sign Up</h1>
+        </div>
+        <div class="fv-row mb-8 fv-plugins-icon-container">
+          <input id="{{ register_form.display_name.id_for_label }}" name="{{ register_form.display_name.html_name }}" type="text" placeholder="Display Name" autocomplete="off" maxlength="63" class="form-control bg-transparent" required />
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+        </div>
+        <div class="fv-row mb-8 fv-plugins-icon-container">
+          <input id="{{ register_form.email.id_for_label }}" name="{{ register_form.email.html_name }}" type="email" placeholder="Email" autocomplete="off" maxlength="254" class="form-control bg-transparent" required />
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            {% for error in register_form.email.errors %}
+                {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="fv-row mb-8 fv-plugins-icon-container">
+          {{ register_form.username }}
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            {% for error in register_form.username.errors %}
+                {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="fv-row mb-8 fv-plugins-icon-container">
+          {{ register_form.password1 }}
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            {% for error in register_form.password1.errors %}
+                {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="fv-row mb-8 fv-plugins-icon-container">
+          {{ register_form.password2 }}
+          <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+            {% for error in register_form.password2.errors %}
+                {{ error }}
+            {% endfor %}
+          </div>
+        </div>
+
+        
+        <div class="d-grid mb-10">
+          <button type="submit" class="btn btn-primary">
+            <span class="">Sign Up</span>
+          </button>
+        </div>
+        <div class="text-gray-500 text-center fw-semibold fs-6">
+          Already a Member?
+          <a href="{% url 'login' %}" class="link-primary">Login</a>
+        </div>
+      </form>
+    </div>
+  </main>
+{% endblock %}

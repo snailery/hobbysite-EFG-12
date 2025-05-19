@@ -2,9 +2,13 @@ from django import forms
 from .models import Product, ProductType, Transaction
 
 class ProductForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["image"].required = False
+
     class Meta:
         model = Product
-        fields = ("name", "desc", "stock", "price", "prod_type", "status")
+        fields = ("name", "desc", "stock", "price", "prod_type", "status", "image")
         widgets = {
             "name": forms.TextInput(
                 attrs={
@@ -47,5 +51,25 @@ class ProductForm(forms.ModelForm):
                     "data-placeholder": "Select an option",
                     "data-hide-search": "true"
                 }
+            ),
+            "image": forms.FileInput(
+                attrs={
+                    "class": "d-none"
+                }
             )
+        }
+
+
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ("amount", )
+        widgets = {
+            "amount": forms.TextInput(
+                attrs={
+                    "class": "form-control form-control-solid border-0 ps-12 fw-bold",
+                    "data-kt-dialer-control": "input",
+                    "placeholder": "0",
+                }
+            ),
         }

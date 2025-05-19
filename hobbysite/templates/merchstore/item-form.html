@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}Item {{ product.name }}{% endblock %}
+
 {% block content %}
 <!-- Top Decoration -->
 <div class="position-absolute top-0 start-0 w-100 z-index-1" id="wave-top">
@@ -11,7 +12,7 @@
   </svg>    
 </div>
 
-<main class="position-relative text-arial-rounded z-index-2 ribbon ribbon-start" id="product-details">
+<main class="position-relative text-arial-rounded z-index-2 ribbon ribbon-start" id="product-form">
   <div class="d-flex flex-column gap-3 ribbon-group ps-md-0 ps-3">
     <div class="ribbon-label bg-green position-relative fs-3 text-white w-fit">
       <svg width="18" height="20" viewBox="0 0 18 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -77,18 +78,19 @@
    
   {% endif %}
 
-  <article class="d-flex flex-column flex-lg-row justify-content-between align-items-center align-items-lg-center h-100 w-lg-900px w-100 m-auto">
-    <figure class="h-50 h-lg-100 w-400px bg-gray-400 opacity-0">
-
+  <article class="d-flex flex-column flex-lg-row justify-content-between align-items-center align-items-lg-center h-100 gap-20 w-fit me-20 float-end">
+    <figure class="d-flex align-items-center h-50 h-lg-100 w-300px me-10">
+      <img src="{% if object.image %}{{ object.image.url }}{% endif %}" class="img-fluid" id="img-preview">
     </figure>
 
-    <form method="POST" class="card d-flex flex-col gap-9 p-9 w-100 w-md-500px h-fit overflow-y-auto text-poppins">
+    <form method="POST" enctype="multipart/form-data" id="item-form" class="card d-flex flex-col gap-9 p-9 w-100 w-md-500px h-fit overflow-y-auto text-poppins">
       {% csrf_token %}
       {% if request.path == "/merchstore/item/add" %}
         <h2 class="text-arial-rounded">Create New Product</h2>
       {% else %}
         <h2 class="text-arial-rounded">Edit Product Details</h2>
       {% endif %}
+
       <div>
         <label for="name" class="required form-label fw-bold">Product Name</label>
         {{ form.name }}
@@ -98,7 +100,7 @@
         <label for="owner" class="form-label fw-bold">Owner</label>
         <div class="position-relative">
           <input type="text" id="owner" class="form-control form-control-solid text-decoration-underline text-gray-500 ps-13" value="{{ request.user }}" disabled/>
-          <div class="position-absolute translate-middle-y top-50 start-0 ms-3 bg-gray-300 ratio-square rounded-circle">
+          <div class="position-absolute translate-middle-y top-50 start-0 ms-3 bg-gray-300 h-25px ratio-square rounded-circle">
             {% comment %} <img src="" alt="{{ request.user.username|slice:"0:1" }}"> {% endcomment %}
           </div>
         </div>
@@ -121,6 +123,55 @@
         {{ form.desc }}
       </div>
       
+      <div>
+        <label for="image" class="form-label fw-bold">Image</label>
+          <div id="dropzone" class="cursor-pointer"
+            {% if object.image %}
+              style="display: none;"
+            {% endif %}
+          >
+            <div class="dz-message d-flex flex-column w-100 bg-gray-100 border-gray-300 border-dashed rounded text-gray-500 justify-content-center align-items-center py-6 gap-3">
+              <i class="ki-duotone ki-file-up fs-3x">
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+              <span class="fw-semibold">Drag image here or click to upload.</span>
+            </div>
+          </div>
+
+        {% if object.image %}
+          <div id="fake-files" class="d-flex justify-content-between w-100 bg-gray-100 text-gray-600 p-3 rounded">
+            <div>
+              <span>{{ filename }}</span>
+              <span class="ms-2 fw-bold">{{ filesize|filesizeformat }}</span>
+            </div>
+            <span id="del-img" onclick="delImage()" class="cursor-pointer text-hover-danger"><i class="bi bi-x fs-1"></i></span>
+          </div>
+        {% endif %}
+
+        <input type="hidden" name="del-image" id="id_del-image" value="{% if object.image %}false{% else %}true{% endif %}"/>
+        {{ form.image }}
+
+        <div id="previews">
+          <div id="template" class="w-100">
+            <div class="dz-preview dz-file-preview well">
+              <div class="dz-details d-flex justify-content-between w-100 bg-gray-100 text-gray-600 p-3 rounded">
+                <div class="dz-filename dz-size">
+                  <span data-dz-name></span>
+                  <span data-dz-size></span>
+                </div>
+                <span data-dz-remove class="cursor-pointer text-hover-danger"><i class="bi bi-x fs-1"></i></span>
+              </div>
+              <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+              <div class="dz-success-mark"><span></span></div>
+              <div class="dz-error-mark"><span></span></div>
+              <div class="dz-error-message mt-2 text-danger">
+                <span data-dz-errormessage></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <div class="d-flex flex-row gap-9">
         <div>
@@ -132,7 +183,6 @@
               </svg>
             </span>
             {{ form.price }}
-            {% comment %} <input id="price" type="text" class="form-control" placeholder="00.00" required/> {% endcomment %}
             <span class="input-group-text">PHP</span>
           </div>
         </div>
@@ -153,7 +203,7 @@
         </div>
       </div>
       
-      <button type="submit" class="btn btn-primary fw-bold mt-auto">Submit</button>
+      <input id="edit-submit" type="button" onclick="formSubmit()" class="btn btn-primary fw-bold mt-auto" value="Submit" />
     </form>
   </article>
 </main>
@@ -178,5 +228,57 @@
       rightAlign: false,
       digits: 2,
       }).mask("#id_price");  
+      
+      previewNode = document.querySelector("#template")
+      previewTemplate = previewNode.parentNode.innerHTML
+      previewNode.parentNode.removeChild(previewNode);
+
+      Dropzone.autoDiscover = false;
+      let myDropzone = new Dropzone("div#dropzone", { 
+        url: "/merchstore/item/add",
+        acceptedFiles: 'image/*',
+        autoProcessQueue: false,
+        uploadMultiple: false,
+        maxFiles: 1,
+        previewTemplate: previewTemplate,
+        previewsContainer: "#previews",
+        init: function() {
+          this.on("addedfile", function() {
+            if (this.files[1]!=null){
+              this.removeFile(this.files[0]);
+            }
+            $("#dropzone").hide();
+            document.getElementById("img-preview").src = URL.createObjectURL(this.files[0]);
+          });
+          this.on("removedfile", function() {
+            $("#dropzone").show();
+            document.getElementById("img-preview").src = "";
+            if ($("#edit-submit").hasClass("disabled"))
+              $("#edit-submit").toggleClass("disabled");
+          });
+          this.on("error", function(file, message) {
+            if (!$("#edit-submit").hasClass("disabled")) 
+              $("#edit-submit").toggleClass("disabled");
+          })
+        },
+      }); 
+
+      function formSubmit() {
+        if (myDropzone.files.length > 0) {
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(myDropzone.files[0]);
+          document.getElementById("id_image").files = dataTransfer.files;
+          document.querySelector("#id_del-image").value = "false"
+        }
+        document.getElementById("item-form").submit();
+      }
+
+      function delImage() {
+        node = document.querySelector("#fake-files")
+        node.parentNode.removeChild(node);
+        document.querySelector("#img-preview").src = "";
+        document.querySelector("#id_del-image").value = "true";
+        $("#dropzone").show();
+      }
   </script>
 {% endblock %}
