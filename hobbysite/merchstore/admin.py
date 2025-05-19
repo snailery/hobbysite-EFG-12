@@ -20,7 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Details", {
             "fields": [
-                ("name", "desc", "price", "stock", "status"), "prod_type", "owner"
+                ("name", "desc", "price", "stock", "status", "image"), "prod_type", "owner"
             ]
         }),
     ]
@@ -33,7 +33,7 @@ class TransactionInline(admin.TabularInline):
 class TransactionAdmin(admin.ModelAdmin):
     model = Transaction
     search_fields = ("product", )
-    list_display = ("product", "amount", "buyer", "status")
+    list_display = ("product", "amount", "buyer", "status", "created_on")
 
     fieldsets = [
         ("Details", {

@@ -21,13 +21,13 @@
   </ol>
   
   {% if request.user.is_authenticated and your_products %}
-    {% with products=your_products header="Your Products" %}
+    {% with products=your_products total=total header="Your Products" %}
       {% include "merchstore/items-list.html" %}
     {% endwith %}
     <hr class="my-6">
   {% endif %}  
 
-  {% with products=all_products header="All Products" %}
+  {% with products=all_products total=total header="All Products" %}
     {% include "merchstore/items-list.html" %}
   {% endwith %}
 
